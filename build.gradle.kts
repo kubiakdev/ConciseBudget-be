@@ -31,4 +31,9 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml:2.3.5")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    // Mongo
+    implementation("org.litote.kmongo:kmongo:4.11.0")
+    implementation("org.litote.kmongo:kmongo-coroutine:4.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 }
