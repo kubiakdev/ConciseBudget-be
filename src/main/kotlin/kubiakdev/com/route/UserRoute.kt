@@ -11,15 +11,11 @@ fun Route.userRoutes() {
         get {
             val email = call.parameters["email"]!!
             val user = getByEmail(email)
-            user?.let {
-                call.respond(
-                    HttpStatusCode.OK,
-                    "found",
-                )
-            } ?: call.respond(
-                HttpStatusCode.NotFound,
-                "not found",
-            )
+            if (user != null) {
+                call.respond(HttpStatusCode.OK, user)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
     }
 }
