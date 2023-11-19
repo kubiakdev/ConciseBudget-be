@@ -31,3 +31,5 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+src/main/kotlin/kubiakdev/com/Connection.kt
