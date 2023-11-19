@@ -13,67 +13,64 @@ fun Route.userRoutes() {
 
     route("/user/{id}") {
         get {
-            val id = try {
-                call.parameters["id"]!!
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest)
+            val id = call.parameters["id"]
+            if (id == null) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong id param")
                 return@get
             }
 
-            runCatching { db.getById(id) }.fold(
-                onSuccess = { user ->
-                    if (user != null) {
-                        call.respond(HttpStatusCode.OK, user)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
-                },
-                onFailure = { call.respond(HttpStatusCode.InternalServerError) }
-            )
+            try {
+                val user = db.getById(id)
+                if (user != null) {
+                    call.respond(HttpStatusCode.OK, user)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, e.toString())
+            }
         }
     }
 
     route("/user/{email}") {
         get {
-            val email = try {
-                call.parameters["email"]!!
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest)
+            val email = call.parameters["email"]
+            if (email == null) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong email param")
                 return@get
             }
 
-            runCatching { db.getByEmail(email) }.fold(
-                onSuccess = { user ->
-                    if (user != null) {
-                        call.respond(HttpStatusCode.OK, user)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
-                },
-                onFailure = { call.respond(HttpStatusCode.InternalServerError) }
-            )
+            try {
+                val user = db.getByEmail(email)
+                if (user != null) {
+                    call.respond(HttpStatusCode.OK, user)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, e.toString())
+            }
         }
     }
 
     route("/user/{authUid}") {
         get {
-            val authUid = try {
-                call.parameters["authUid"]!!
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest)
+            val authUid = call.parameters["authUid"]
+            if (authUid == null) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong authUid param")
                 return@get
             }
 
-            runCatching { db.getByAuthUid(authUid) }.fold(
-                onSuccess = { user ->
-                    if (user != null) {
-                        call.respond(HttpStatusCode.OK, user)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
-                },
-                onFailure = { call.respond(HttpStatusCode.InternalServerError) }
-            )
+            try {
+                val user = db.getByAuthUid(authUid)
+                if (user != null) {
+                    call.respond(HttpStatusCode.OK, user)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, e.toString())
+            }
         }
     }
 
@@ -82,36 +79,41 @@ fun Route.userRoutes() {
             val user = try {
                 call.receive<User>()
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, "Wrong user body")
                 return@post
             }
 
-            runCatching { db.addUser(user) }.fold(
-                onSuccess = { userId ->
-                    if (userId != null) {
-                        call.respond(HttpStatusCode.Created)
-                    } else {
-                        call.respond(HttpStatusCode.BadRequest)
-                    }
-                },
-                onFailure = { call.respond(HttpStatusCode.InternalServerError) }
-            )
+            try {
+                val userId = db.addUser(user)
+                if (userId != null) {
+                    call.respond(HttpStatusCode.Created)
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, e.toString())
+            }
         }
     }
 
     route("/user/{id}") {
         delete {
-            val id = try {
-                call.parameters["id"]!!
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest)
+            val id = call.parameters["id"]
+            if (id == null) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong id param")
                 return@delete
             }
 
-            runCatching { db.removeById(id) }.fold(
-                onSuccess = { call.respond(HttpStatusCode.NoContent) },
-                onFailure = { call.respond(HttpStatusCode.InternalServerError) }
-            )
+            try {
+                val removed = db.removeById(id)
+                if (removed) {
+                    call.respond(HttpStatusCode.NoContent)
+                } else {
+                    call.respond(HttpStatusCode.InternalServerError, "Object not removed successfully")
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, e.toString())
+            }
         }
     }
 }
