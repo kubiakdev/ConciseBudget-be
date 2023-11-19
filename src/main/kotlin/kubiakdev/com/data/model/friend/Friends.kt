@@ -1,9 +1,10 @@
 package kubiakdev.com.data.model.friend
 
 import org.bson.codecs.pojo.annotations.BsonId
+import org.litote.kmongo.Id
 
 data class Friends(
-    @BsonId val id: String,
-    @BsonId val ownerId: String,
+    @BsonId var id: Id<String>? = null,
+    @BsonId val ownerId: Id<String>,
     val friends: List<Friend>,
 )
