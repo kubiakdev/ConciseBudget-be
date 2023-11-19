@@ -14,9 +14,7 @@ suspend fun getByEmail(email: String): User? = collection.findOne(User::email eq
 
 suspend fun getByAuthUid(authUid: String): User? = collection.findOne(User::authUid eq authUid)
 
-suspend fun addUser(user: User) {
-    collection.insertOne(user)
-}
+suspend fun addUser(user: User): ObjectId? = collection.insertOne(user).insertedId?.asObjectId()?.value
 
 suspend fun removeById(id: String) {
     collection.deleteOne(User::id eq ObjectId(id).toId())
