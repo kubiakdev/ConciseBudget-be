@@ -1,4 +1,4 @@
-package kubiakdev.com.plugins
+package kubiakdev.com.plugin
 
 import io.ktor.server.application.*
 import io.ktor.server.response.*
