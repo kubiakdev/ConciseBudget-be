@@ -3,6 +3,7 @@ package kubiakdev.com.data.database
 import kubiakdev.com.data.database
 import kubiakdev.com.data.model.transaction.Transaction
 import kubiakdev.com.data.model.transaction.TransactionPart
+import kubiakdev.com.data.model.user.User
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.id.toId
@@ -18,4 +19,7 @@ class TransactionDatabase {
 
     suspend fun update(transaction: Transaction): Boolean =
         collection.findOneAndReplace(filter = Transaction::id eq transaction.id, replacement = transaction) != null
+
+    suspend fun removeById(id: String): Boolean =
+        collection.deleteOne(Transaction::id eq ObjectId(id).toId()).wasAcknowledged()
 }
