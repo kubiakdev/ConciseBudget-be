@@ -16,28 +16,6 @@ import kubiakdev.com.plugin.temp.signUpUser
 fun Route.userRoutes() {
     val db = UserDao()
 
-    route("/user/sign-up") {
-        post {
-            val user = call.receive<SignInData>()
-            signUpUser(user.email, user.password)
-        }
-    }
-
-    authenticate(FIREBASE_AUTH) {
-        get("/authenticated") {
-            val user: FirebaseUser =
-                call.principal() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            call.respond("User is authenticated: $user")
-        }
-    }
-
-    // todo to change
-    /*authenticate("auth-bearer") {
-        get("/") {
-            call.respondText("Hello, ${call.principal<UserIdPrincipal>()?.name}!")
-        }
-    }*/
-
     route("/user/{id}") {
         get {
             val id = call.parameters["id"]
