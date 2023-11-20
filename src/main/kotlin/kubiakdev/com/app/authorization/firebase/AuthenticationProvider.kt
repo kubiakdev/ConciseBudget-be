@@ -5,7 +5,6 @@ import io.ktor.http.auth.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
-import kubiakdev.com.data.model.principal.FirebaseUser
 
 // todo refactor it
 class FirebaseConfig(name: String?) : AuthenticationProvider.Config(name) {

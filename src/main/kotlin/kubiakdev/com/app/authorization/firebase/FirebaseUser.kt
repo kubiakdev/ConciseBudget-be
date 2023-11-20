@@ -1,4 +1,4 @@
-package kubiakdev.com.data.model.principal
+package kubiakdev.com.app.authorization.firebase
 
 import io.ktor.server.auth.*
 

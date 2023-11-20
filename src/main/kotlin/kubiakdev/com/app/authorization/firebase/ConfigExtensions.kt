@@ -1,4 +1,4 @@
-package kubiakdev.com.plugin.temp
+package kubiakdev.com.app.authorization.firebase
 
 import io.ktor.server.auth.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH

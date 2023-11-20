@@ -2,16 +2,11 @@ package kubiakdev.com.route
 
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kubiakdev.com.data.database.dao.UserDao
-import kubiakdev.com.data.model.principal.FirebaseUser
-import kubiakdev.com.data.model.principal.SignInData
 import kubiakdev.com.data.database.model.user.User
-import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
-import kubiakdev.com.plugin.temp.signUpUser
 
 fun Route.userRoutes() {
     val db = UserDao()

@@ -6,16 +6,16 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kubiakdev.com.api.sign.up.SignUpBody
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
-import kubiakdev.com.data.model.principal.FirebaseUser
-import kubiakdev.com.data.model.principal.SignInData
-import kubiakdev.com.plugin.temp.signUpUser
+import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCase
 
-fun Route.authorizationRoutes(){
+fun Route.authorizationRoutes() {
     route("/user/sign-up") {
         post {
-            val user = call.receive<SignInData>()
-            signUpUser(user.email, user.password)
+            val user = call.receive<SignUpBody>()
+            SignUpUserUseCase.signUpUser(user.email, user.password)
         }
     }
 
