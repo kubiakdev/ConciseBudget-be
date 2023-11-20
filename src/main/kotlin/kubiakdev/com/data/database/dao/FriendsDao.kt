@@ -1,12 +1,12 @@
-package kubiakdev.com.data.database
+package kubiakdev.com.data.database.dao
 
 import kubiakdev.com.data.database
-import kubiakdev.com.data.model.friend.Friends
+import kubiakdev.com.data.database.model.friend.Friends
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.id.toId
 
-class FriendsDatabase {
+class FriendsDao {
     private val collection = database.getCollection<Friends>("friends")
 
     suspend fun loadAll(ownerUserId: String): Friends? =

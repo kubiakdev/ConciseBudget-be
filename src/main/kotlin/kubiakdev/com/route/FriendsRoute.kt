@@ -5,11 +5,11 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kubiakdev.com.data.database.FriendsDatabase
-import kubiakdev.com.data.model.friend.Friends
+import kubiakdev.com.data.database.dao.FriendsDao
+import kubiakdev.com.data.database.model.friend.Friends
 
 fun Route.friendsRoutes() {
-    val db = FriendsDatabase()
+    val db = FriendsDao()
 
     route("/friends/{ownerId}") {
         get {

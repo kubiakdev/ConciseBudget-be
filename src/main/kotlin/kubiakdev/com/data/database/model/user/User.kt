@@ -1,4 +1,4 @@
-package kubiakdev.com.data.model.user
+package kubiakdev.com.data.database.model.user
 
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id

@@ -1,4 +1,4 @@
-package kubiakdev.com.data.model.friend
+package kubiakdev.com.data.database.model.friend
 
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id

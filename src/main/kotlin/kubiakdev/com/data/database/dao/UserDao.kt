@@ -1,12 +1,12 @@
-package kubiakdev.com.data.database
+package kubiakdev.com.data.database.dao
 
 import kubiakdev.com.data.database
-import kubiakdev.com.data.model.user.User
+import kubiakdev.com.data.database.model.user.User
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.id.toId
 
-class UserDatabase {
+class UserDao {
     private val collection = database.getCollection<User>("user")
 
     suspend fun getById(id: String): User? = collection.findOne(User::id eq ObjectId(id).toId())

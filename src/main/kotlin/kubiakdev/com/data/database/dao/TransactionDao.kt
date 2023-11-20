@@ -1,14 +1,13 @@
-package kubiakdev.com.data.database
+package kubiakdev.com.data.database.dao
 
 import kubiakdev.com.data.database
-import kubiakdev.com.data.model.transaction.Transaction
-import kubiakdev.com.data.model.transaction.TransactionPart
-import kubiakdev.com.data.model.user.User
+import kubiakdev.com.data.database.model.transaction.Transaction
+import kubiakdev.com.data.database.model.transaction.TransactionPart
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.id.toId
 
-class TransactionDatabase {
+class TransactionDao {
     private val collection = database.getCollection<Transaction>("transaction")
 
     suspend fun loadAll(userId: String): List<Transaction> =

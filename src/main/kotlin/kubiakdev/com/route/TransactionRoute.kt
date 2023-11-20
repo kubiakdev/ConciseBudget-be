@@ -5,11 +5,11 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kubiakdev.com.data.database.TransactionDatabase
-import kubiakdev.com.data.model.transaction.Transaction
+import kubiakdev.com.data.database.dao.TransactionDao
+import kubiakdev.com.data.database.model.transaction.Transaction
 
 fun Route.transactionRoutes() {
-    val db = TransactionDatabase()
+    val db = TransactionDao()
 
     route("/transaction/{userId}") {
         get {
