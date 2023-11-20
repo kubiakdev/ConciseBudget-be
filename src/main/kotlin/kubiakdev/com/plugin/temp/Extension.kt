@@ -1,6 +1,9 @@
 package kubiakdev.com.plugin.temp
 
 import io.ktor.server.auth.*
+import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
+import kubiakdev.com.app.authorization.firebase.FirebaseAuthProvider
+import kubiakdev.com.app.authorization.firebase.FirebaseConfig
 
 // todo refactor it
 fun AuthenticationConfig.firebase(

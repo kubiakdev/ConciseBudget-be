@@ -10,7 +10,7 @@ import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.data.model.principal.FirebaseUser
 import kubiakdev.com.data.model.principal.SignInData
 import kubiakdev.com.data.database.model.user.User
-import kubiakdev.com.plugin.temp.FIREBASE_AUTH
+import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.plugin.temp.signUpUser
 
 fun Route.userRoutes() {

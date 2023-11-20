@@ -2,15 +2,15 @@ package kubiakdev.com
 
 import io.ktor.server.application.*
 import kubiakdev.com.plugin.*
-import kubiakdev.com.plugin.temp.FirebaseAdmin
-import kubiakdev.com.plugin.temp.configureFirebaseAuth
+import kubiakdev.com.app.authorization.firebase.FirebaseAppInitializer
+import kubiakdev.com.app.authorization.firebase.configureFirebaseAuth
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
-    FirebaseAdmin.init()
+    FirebaseAppInitializer.init()
     configureFirebaseAuth()
     configureSerialization()
     configureRouting()
