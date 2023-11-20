@@ -1,15 +1,16 @@
 package kubiakdev.com
 
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import kubiakdev.com.plugin.*
+import kubiakdev.com.plugin.configureAuthentication
+import kubiakdev.com.plugin.configureRouting
+import kubiakdev.com.plugin.configureSerialization
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
+    configureAuthentication()
     configureSerialization()
     configureRouting()
-    install(Authentication)
 }
