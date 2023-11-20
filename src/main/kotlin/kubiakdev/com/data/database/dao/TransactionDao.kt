@@ -1,6 +1,6 @@
 package kubiakdev.com.data.database.dao
 
-import kubiakdev.com.data.database
+import kubiakdev.com.data.database.database
 import kubiakdev.com.data.database.model.transaction.Transaction
 import kubiakdev.com.data.database.model.transaction.TransactionPart
 import org.bson.types.ObjectId

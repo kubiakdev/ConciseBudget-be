@@ -1,6 +1,6 @@
 package kubiakdev.com.data.database.dao
 
-import kubiakdev.com.data.database
+import kubiakdev.com.data.database.database
 import kubiakdev.com.data.database.model.user.User
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
