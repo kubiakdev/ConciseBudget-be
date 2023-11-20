@@ -33,3 +33,4 @@ out/
 /.nb-gradle/
 
 src/main/kotlin/kubiakdev/com/Connection.kt
+src/main/resources/firebase-adminsdk.json
