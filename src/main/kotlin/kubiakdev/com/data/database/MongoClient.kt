@@ -1,6 +1,6 @@
-package kubiakdev.com.data
+package kubiakdev.com.data.database
 
-import kubiakdev.com.mongoConnection
+import kubiakdev.com.util.mongoConnection
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 

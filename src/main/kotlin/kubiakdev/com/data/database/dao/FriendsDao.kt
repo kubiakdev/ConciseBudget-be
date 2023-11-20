@@ -6,7 +6,7 @@ import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.id.toId
 
-class FriendsDao {
+class FriendsDatabase {
     private val collection = database.getCollection<Friends>("friends")
 
     suspend fun loadAll(ownerUserId: String): Friends? =
