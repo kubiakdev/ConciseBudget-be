@@ -38,4 +38,7 @@ dependencies {
     implementation("org.litote.kmongo:kmongo-coroutine:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
+    // Firebase Authentication
+    implementation("com.google.firebase:firebase-admin:9.2.0")
+
 }
