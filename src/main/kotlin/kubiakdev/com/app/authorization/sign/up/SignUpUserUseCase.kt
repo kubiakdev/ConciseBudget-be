@@ -48,7 +48,7 @@ object SignUpUserUseCase {
 
         return try {
             if (response.status.isSuccess()) {
-                val response = json.decodeFromString<SignUpResponse>(response.bodyAsText())
+                val response: SignUpResponse = json.decodeFromString<SignUpResponse>(response.bodyAsText())
             } else {
                 println("Error: ${response.status}")
             }
