@@ -15,7 +15,8 @@ fun Route.authorizationRoutes() {
     route("/user/sign-up") {
         post {
             val body = call.receive<SignUpBody>()
-            SignUpUserUseCase.signUpUser(email = body.email, password = body.password)
+            val response = SignUpUserUseCase.signUpUser(email = body.email, password = body.password)
+            call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
     }
 

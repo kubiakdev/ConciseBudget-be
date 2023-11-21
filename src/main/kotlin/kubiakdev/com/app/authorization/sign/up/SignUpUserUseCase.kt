@@ -1,6 +1,5 @@
 package kubiakdev.com.app.authorization.sign.up
 
-import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.request.*
@@ -9,24 +8,25 @@ import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kubiakdev.com.app.authorization.firebase.firebaseApiKey
+import kubiakdev.com.util.Response
 
 object SignUpUserUseCase {
 
     private const val SIGN_UP_FIREBASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp"
-    suspend fun signUpUser(email: String, password: String): SignUpResponse? {
+
+    // todo make it global
+    private val json = Json { ignoreUnknownKeys = true }
+
+    suspend fun signUpUser(email: String, password: String): Response<SignUpResponse> {
         return try {
             createFirebaseUser(email, password)
-            null
-
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            Response(Result.failure(e), HttpStatusCode.InternalServerError)
         }
     }
 
-    private val json = Json { ignoreUnknownKeys = true }
-
-    private suspend fun createFirebaseUser(email: String, password: String) {
+    private suspend fun createFirebaseUser(email: String, password: String): Response<SignUpResponse> {
         // todo make it global
         val client = HttpClient(engine = OkHttpEngine(OkHttpConfig())) {
             // todo install missing json component
@@ -48,12 +48,16 @@ object SignUpUserUseCase {
 
         return try {
             if (response.status.isSuccess()) {
-                val response: SignUpResponse = json.decodeFromString<SignUpResponse>(response.bodyAsText())
+                Response(
+                    Result.success(json.decodeFromString<SignUpResponse>(response.bodyAsText())),
+                    HttpStatusCode.Created
+                )
             } else {
                 println("Error: ${response.status}")
+                Response(Result.failure(Throwable(response.status.description)), response.status)
             }
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            Response(Result.failure(Throwable(e)), response.status)
         }
     }
 }
