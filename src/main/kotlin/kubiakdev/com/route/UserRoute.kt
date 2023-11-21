@@ -2,117 +2,132 @@ package kubiakdev.com.route
 
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
+import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.data.database.model.user.User
 
 fun Route.userRoutes() {
     val db = UserDao()
 
-    route("/user/{id}") {
-        get {
-            val id = call.parameters["id"]
-            if (id == null) {
-                call.respond(HttpStatusCode.BadRequest, "Wrong id param")
-                return@get
-            }
+    authenticate(FIREBASE_AUTH) {
+        route("/user/{id}") {
+            get {
+                call.principal<FirebaseUser>() ?:  return@get call.respond(HttpStatusCode.Unauthorized)
 
-            try {
-                val user = db.getById(id)
-                if (user != null) {
-                    call.respond(HttpStatusCode.OK, user)
-                } else {
-                    call.respond(HttpStatusCode.NotFound)
+                val id = call.parameters["id"]
+                if (id == null) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong id param")
+                    return@get
                 }
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError, e.toString())
+
+                try {
+                    val user = db.getById(id)
+                    if (user != null) {
+                        call.respond(HttpStatusCode.OK, user)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
             }
         }
-    }
 
-    route("/user/{email}") {
-        get {
-            val email = call.parameters["email"]
-            if (email == null) {
-                call.respond(HttpStatusCode.BadRequest, "Wrong email param")
-                return@get
-            }
+        route("/user/{email}") {
+            get {
+                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
-            try {
-                val user = db.getByEmail(email)
-                if (user != null) {
-                    call.respond(HttpStatusCode.OK, user)
-                } else {
-                    call.respond(HttpStatusCode.NotFound)
+                val email = call.parameters["email"]
+                if (email == null) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong email param")
+                    return@get
                 }
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError, e.toString())
+
+                try {
+                    val user = db.getByEmail(email)
+                    if (user != null) {
+                        call.respond(HttpStatusCode.OK, user)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
             }
         }
-    }
 
-    route("/user/{authUid}") {
-        get {
-            val authUid = call.parameters["authUid"]
-            if (authUid == null) {
-                call.respond(HttpStatusCode.BadRequest, "Wrong authUid param")
-                return@get
-            }
+        route("/user/{authUid}") {
+            get {
+                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
-            try {
-                val user = db.getByAuthUid(authUid)
-                if (user != null) {
-                    call.respond(HttpStatusCode.OK, user)
-                } else {
-                    call.respond(HttpStatusCode.NotFound)
+                val authUid = call.parameters["authUid"]
+                if (authUid == null) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong authUid param")
+                    return@get
                 }
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError, e.toString())
+
+                try {
+                    val user = db.getByAuthUid(authUid)
+                    if (user != null) {
+                        call.respond(HttpStatusCode.OK, user)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
             }
         }
-    }
 
-    route("/user") {
-        post {
-            val user = try {
-                call.receive<User>()
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, "Wrong user body")
-                return@post
-            }
+        route("/user") {
+            post {
+                call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
-            try {
-                val userId = db.addUser(user)
-                if (userId != null) {
-                    call.respond(HttpStatusCode.Created)
-                } else {
-                    call.respond(HttpStatusCode.BadRequest)
+                val user = try {
+                    call.receive<User>()
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong user body")
+                    return@post
                 }
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError, e.toString())
+
+                try {
+                    val userId = db.addUser(user)
+                    if (userId != null) {
+                        call.respond(HttpStatusCode.Created)
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest)
+                    }
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
             }
         }
-    }
 
-    route("/user/{id}") {
-        delete {
-            val id = call.parameters["id"]
-            if (id == null) {
-                call.respond(HttpStatusCode.BadRequest, "Wrong id param")
-                return@delete
-            }
+        route("/user/{id}") {
+            delete {
+                call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
-            try {
-                val removed = db.removeById(id)
-                if (removed) {
-                    call.respond(HttpStatusCode.NoContent)
-                } else {
-                    call.respond(HttpStatusCode.InternalServerError, "Object not removed successfully")
+                val id = call.parameters["id"]
+                if (id == null) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong id param")
+                    return@delete
                 }
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError, e.toString())
+
+                try {
+                    val removed = db.removeById(id)
+                    if (removed) {
+                        call.respond(HttpStatusCode.NoContent)
+                    } else {
+                        call.respond(HttpStatusCode.InternalServerError, "Object not removed successfully")
+                    }
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
             }
         }
     }
