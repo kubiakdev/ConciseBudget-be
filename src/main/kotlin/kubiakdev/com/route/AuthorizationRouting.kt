@@ -8,6 +8,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.sign.`in`.SignInBody
+import kubiakdev.com.app.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.app.authorization.sign.up.SignUpBody
 import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCase
 
@@ -16,6 +18,14 @@ fun Route.authorizationRoutes() {
         post {
             val body = call.receive<SignUpBody>()
             val response = SignUpUserUseCase.signUpUser(email = body.email, password = body.password)
+            call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
+        }
+    }
+
+    route("/user/sign-in") {
+        post {
+            val body = call.receive<SignInBody>()
+            val response = SignInUserUseCase.signInUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
     }
