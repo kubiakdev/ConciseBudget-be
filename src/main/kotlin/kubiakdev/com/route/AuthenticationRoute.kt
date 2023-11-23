@@ -17,7 +17,7 @@ import kubiakdev.com.domain.route.model.sign.up.SignUpBody
 import kubiakdev.com.util.mapper.toDomainModel
 import org.koin.ktor.ext.inject
 
-fun Route.authorizationRoutes() {
+fun Route.authenticationRoutes() {
 
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()

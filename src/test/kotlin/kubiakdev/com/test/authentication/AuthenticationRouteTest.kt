@@ -8,6 +8,7 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel
 import kotlin.test.Test
 
 class AuthenticatedRouteTest {
@@ -33,6 +34,19 @@ class AuthenticatedRouteTest {
             setBody(Json.encodeToString(Unit))
         }.apply {
             assertEquals(HttpStatusCode.BadRequest, status)
+        }
+    }
+
+    @Test
+    fun `GIVEN correct signing up data WHEN signing up THEN 200 created`() = testApplication {
+        val exampleBody = SignUpBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
+        client.post("/user/sign-up") {
+            headers {
+                append("Content-Type", ContentType.Application.Json)
+            }
+            setBody(Json.encodeToString(exampleBody))
+        }.apply {
+            assertEquals(HttpStatusCode.Created, status)
         }
     }
 

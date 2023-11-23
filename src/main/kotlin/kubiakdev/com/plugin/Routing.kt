@@ -7,7 +7,7 @@ import kubiakdev.com.route.*
 fun Application.configureRouting() {
     routing {
         rootRoute()
-        authorizationRoutes()
+        authenticationRoutes()
         userRoutes()
         friendsRoutes()
         transactionRoutes()
