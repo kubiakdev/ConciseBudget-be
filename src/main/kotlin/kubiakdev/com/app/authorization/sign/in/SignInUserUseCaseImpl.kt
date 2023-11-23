@@ -8,16 +8,15 @@ import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kubiakdev.com.app.authorization.firebase.firebaseApiKey
+import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.util.Response
 
-object SignInUserUseCase {
-
-    private const val SIGN_IN_FIREBASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword"
+class SignInUserUseCaseImpl : SignInUserUseCase {
 
     // todo make it global
     private val json = Json { ignoreUnknownKeys = true }
 
-    suspend fun signInUser(email: String, password: String): Response<SignInResponse> {
+    override suspend fun signInUser(email: String, password: String): Response<SignInResponse> {
         return try {
             loginFirebaseUser(email, password)
         } catch (e: Exception) {
@@ -59,5 +58,9 @@ object SignInUserUseCase {
         } catch (e: Exception) {
             Response(Result.failure(Throwable(e)), response.status)
         }
+    }
+
+    private companion object {
+        private const val SIGN_IN_FIREBASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword"
     }
 }
