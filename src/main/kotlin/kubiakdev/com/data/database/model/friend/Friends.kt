@@ -5,6 +5,6 @@ import org.litote.kmongo.Id
 
 data class Friends(
     @BsonId var id: Id<String>? = null,
-    @BsonId val ownerId: Id<String>,
+    val ownerId: String,
     val friends: List<Friend>,
 )

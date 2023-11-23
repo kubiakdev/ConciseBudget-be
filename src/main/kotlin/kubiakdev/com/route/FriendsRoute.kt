@@ -38,7 +38,6 @@ fun Route.friendsRoutes() {
             }
         }
 
-
         route("/friends") {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)

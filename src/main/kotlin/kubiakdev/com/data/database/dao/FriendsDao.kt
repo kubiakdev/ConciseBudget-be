@@ -10,7 +10,7 @@ class FriendsDao {
     private val collection = database.getCollection<Friends>("friends")
 
     suspend fun loadAll(ownerUserId: String): Friends? =
-        collection.findOne(Friends::ownerId eq ObjectId(ownerUserId).toId())
+        collection.findOne(Friends::ownerId eq ownerUserId)
 
     suspend fun create(friends: Friends): ObjectId? = collection.insertOne(friends).insertedId?.asObjectId()?.value
 
