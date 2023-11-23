@@ -9,14 +9,19 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.app.authorization.sign.`in`.SignInBodyRouteModel
-import kubiakdev.com.app.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel
-import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCase
+import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
+import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import kubiakdev.com.domain.route.model.sign.`in`.SignInBody
 import kubiakdev.com.domain.route.model.sign.up.SignUpBody
 import kubiakdev.com.util.mapper.toDomainModel
+import org.koin.ktor.ext.inject
 
 fun Route.authorizationRoutes() {
+
+    val signUpUseCase by inject<SignUpUserUseCase>()
+    val signInUseCase by inject<SignInUserUseCase>()
+
     route("/user/sign-up") {
         post {
             val body: SignUpBody
@@ -27,7 +32,7 @@ fun Route.authorizationRoutes() {
                 return@post
             }
 
-            val response = SignUpUserUseCase.signUpUser(email = body.email, password = body.password)
+            val response = signUpUseCase.signUpUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
     }
@@ -42,7 +47,7 @@ fun Route.authorizationRoutes() {
                 return@post
             }
 
-            val response = SignInUserUseCase.signInUser(email = body.email, password = body.password)
+            val response = signInUseCase.signInUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
     }
