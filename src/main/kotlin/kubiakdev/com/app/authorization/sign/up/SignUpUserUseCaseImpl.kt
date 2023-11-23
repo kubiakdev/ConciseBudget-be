@@ -1,7 +1,5 @@
 package kubiakdev.com.app.authorization.sign.up
 
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -10,11 +8,10 @@ import kotlinx.serialization.json.Json
 import kubiakdev.com.app.authorization.firebase.firebaseApiKey
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import kubiakdev.com.util.Response
+import kubiakdev.com.util.provider.httpClient
+import kubiakdev.com.util.provider.json
 
 class SignUpUserUseCaseImpl : SignUpUserUseCase {
-
-    // todo make it global
-    private val json = Json { ignoreUnknownKeys = true }
 
     override suspend fun signUpUser(email: String, password: String): Response<SignUpResponse> {
         return try {
@@ -26,16 +23,10 @@ class SignUpUserUseCaseImpl : SignUpUserUseCase {
     }
 
     private suspend fun createFirebaseUser(email: String, password: String): Response<SignUpResponse> {
-        // todo make it global
-        val client = HttpClient(engine = OkHttpEngine(OkHttpConfig())) {
-            // todo install missing json component
-        }
-
-
         val body = SignUpFirebaseBody(email, password, returnSecureToken = true)
         val bodyJson = Json.encodeToString(body)
 
-        val response: HttpResponse = client.request(
+        val response: HttpResponse = httpClient.request(
             url = Url("$SIGN_UP_FIREBASE_URL?key=$firebaseApiKey"),
             block = {
                 method = HttpMethod.Post
