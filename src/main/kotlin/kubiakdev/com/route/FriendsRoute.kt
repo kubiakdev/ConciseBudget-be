@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
-import kubiakdev.com.data.database.model.friend.Friends
+import kubiakdev.com.data.database.model.friend.FriendsEntity
 
 fun Route.friendsRoutes() {
     val db = FriendsDao()
@@ -43,7 +43,7 @@ fun Route.friendsRoutes() {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
                 val friends = try {
-                    call.receive<Friends>()
+                    call.receive<FriendsEntity>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong friends body")
                     return@post
@@ -67,7 +67,7 @@ fun Route.friendsRoutes() {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
                 val friends = try {
-                    call.receive<Friends>()
+                    call.receive<FriendsEntity>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong friends body")
                     return@patch

@@ -1,19 +1,18 @@
 package kubiakdev.com.data.database.dao
 
 import kubiakdev.com.data.database.database
-import kubiakdev.com.data.database.model.friend.Friends
+import kubiakdev.com.data.database.model.friend.FriendsEntity
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
-import org.litote.kmongo.id.toId
 
 class FriendsDao {
-    private val collection = database.getCollection<Friends>("friends")
+    private val collection = database.getCollection<FriendsEntity>("friends")
 
-    suspend fun loadAll(ownerUserId: String): Friends? =
-        collection.findOne(Friends::ownerId eq ownerUserId)
+    suspend fun loadAll(ownerUserId: String): FriendsEntity? =
+        collection.findOne(FriendsEntity::ownerId eq ownerUserId)
 
-    suspend fun create(friends: Friends): ObjectId? = collection.insertOne(friends).insertedId?.asObjectId()?.value
+    suspend fun create(friends: FriendsEntity): ObjectId? = collection.insertOne(friends).insertedId?.asObjectId()?.value
 
-    suspend fun update(friends: Friends): Boolean =
-        collection.findOneAndReplace(filter = Friends::id eq friends.id, replacement = friends) != null
+    suspend fun update(friends: FriendsEntity): Boolean =
+        collection.findOneAndReplace(filter = FriendsEntity::id eq friends.id, replacement = friends) != null
 }

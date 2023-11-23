@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
-import kubiakdev.com.data.database.model.transaction.Transaction
+import kubiakdev.com.data.database.model.transaction.TransactionEntity
 
 fun Route.transactionRoutes() {
     val db = TransactionDao()
@@ -39,7 +39,7 @@ fun Route.transactionRoutes() {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
                 val transaction = try {
-                    call.receive<Transaction>()
+                    call.receive<TransactionEntity>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
                     return@post
@@ -63,7 +63,7 @@ fun Route.transactionRoutes() {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
                 val transaction = try {
-                    call.receive<Transaction>()
+                    call.receive<TransactionEntity>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
                     return@patch

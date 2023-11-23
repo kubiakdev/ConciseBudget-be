@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.UserDao
-import kubiakdev.com.data.database.model.user.User
+import kubiakdev.com.data.database.model.user.UserEntity
 
 fun Route.userRoutes() {
     val db = UserDao()
@@ -89,7 +89,7 @@ fun Route.userRoutes() {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
                 val user = try {
-                    call.receive<User>()
+                    call.receive<UserEntity>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong user body")
                     return@post
