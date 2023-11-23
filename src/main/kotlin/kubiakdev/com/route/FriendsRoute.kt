@@ -10,6 +10,7 @@ import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.model.friend.FriendsEntity
+import kubiakdev.com.util.mapper.toRouteModel
 
 fun Route.friendsRoutes() {
     val db = FriendsDao()
@@ -26,7 +27,7 @@ fun Route.friendsRoutes() {
                 }
 
                 try {
-                    val friends = db.loadAll(ownerId)
+                    val friends = db.loadAll(ownerId)?.toRouteModel()
                     if (friends != null) {
                         call.respond(HttpStatusCode.OK, friends)
                     } else {

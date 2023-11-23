@@ -1,4 +1,4 @@
-package kubiakdev.com.domain.model.friends
+package kubiakdev.com.domain.model.friend
 
 data class Friend(
     val userId: String,
