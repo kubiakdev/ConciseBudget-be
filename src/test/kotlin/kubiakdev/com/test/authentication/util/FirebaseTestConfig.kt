@@ -1,4 +1,4 @@
-package kubiakdev.com.test.authentication
+package kubiakdev.com.test.authentication.util
 
 import io.ktor.server.auth.*
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
