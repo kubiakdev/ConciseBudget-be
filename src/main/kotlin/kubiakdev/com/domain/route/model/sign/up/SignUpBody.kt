@@ -1,3 +1,3 @@
-package kubiakdev.com.app.authorization.sign.up
+package kubiakdev.com.domain.route.model.sign.up
 
 data class SignUpBody(val email: String, val password: String)
