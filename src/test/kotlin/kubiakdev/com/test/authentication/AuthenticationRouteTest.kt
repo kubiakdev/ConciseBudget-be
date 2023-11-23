@@ -49,7 +49,6 @@ class AuthenticatedRouteTest {
         }
     }
 
-    @Ignore("Problem with deserialization. It ignores @serializename annotations and searches for the variable names")
     @Test
     fun `GIVEN correct signing in data WHEN signing in THEN 200 ok`() = testApplication {
         val exampleBody = SignInBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
