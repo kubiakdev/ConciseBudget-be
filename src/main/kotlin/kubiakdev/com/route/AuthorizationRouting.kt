@@ -10,13 +10,22 @@ import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.app.authorization.sign.`in`.SignInBody
 import kubiakdev.com.app.authorization.sign.`in`.SignInUserUseCase
-import kubiakdev.com.app.authorization.sign.up.SignUpBody
+import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel
 import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCase
+import kubiakdev.com.domain.route.model.sign.up.SignUpBody
+import kubiakdev.com.util.mapper.toDomainModel
 
 fun Route.authorizationRoutes() {
     route("/user/sign-up") {
         post {
-            val body = call.receive<SignUpBody>()
+            val body: SignUpBody
+            try {
+                body = call.receive<SignUpBodyRouteModel>().toDomainModel()
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong body")
+                return@post
+            }
+
             val response = SignUpUserUseCase.signUpUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
@@ -24,7 +33,14 @@ fun Route.authorizationRoutes() {
 
     route("/user/sign-in") {
         post {
-            val body = call.receive<SignInBody>()
+            val body: SignInBody
+            try {
+                body = call.receive<SignInBody>()
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong body")
+                return@post
+            }
+
             val response = SignInUserUseCase.signInUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
