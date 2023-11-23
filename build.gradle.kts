@@ -2,6 +2,7 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val koin_ktor: String by project
 
 plugins {
     kotlin("jvm") version "1.9.20"
@@ -36,6 +37,10 @@ dependencies {
     // Authentication
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("com.google.firebase:firebase-admin:9.2.0")
+
+    // Koin
+    implementation("io.insert-koin:koin-ktor:$koin_ktor")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
 
     // OkHttp
     implementation("io.ktor:ktor-client-okhttp:1.6.6")
