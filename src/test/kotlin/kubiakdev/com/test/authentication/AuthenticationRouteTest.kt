@@ -8,7 +8,11 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.sign.`in`.SignInBodyRouteModel
+import kubiakdev.com.app.authorization.sign.`in`.SignInResponse
 import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel
+import kubiakdev.com.util.provider.json
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class AuthenticatedRouteTest {
@@ -16,10 +20,8 @@ class AuthenticatedRouteTest {
     @Test
     fun `GIVEN incorrect signing up data WHEN signing up THEN 400 bad request`() = testApplication {
         client.post("/user/sign-up") {
-            headers {
-                append("Content-Type", ContentType.Application.Json)
-            }
-            setBody(Json.encodeToString(Unit))
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(Unit))
         }.apply {
             assertEquals(HttpStatusCode.BadRequest, status)
         }
@@ -28,25 +30,36 @@ class AuthenticatedRouteTest {
     @Test
     fun `GIVEN incorrect signing in data WHEN signing in THEN 400 bad request`() = testApplication {
         client.post("/user/sign-in") {
-            headers {
-                append("Content-Type", ContentType.Application.Json)
-            }
-            setBody(Json.encodeToString(Unit))
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(Unit))
         }.apply {
             assertEquals(HttpStatusCode.BadRequest, status)
         }
     }
 
+    // todo remove it at the end
     @Test
-    fun `GIVEN correct signing up data WHEN signing up THEN 200 created`() = testApplication {
+    fun `GIVEN correct signing up data WHEN signing up THEN 201 created`() = testApplication {
         val exampleBody = SignUpBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
         client.post("/user/sign-up") {
-            headers {
-                append("Content-Type", ContentType.Application.Json)
-            }
-            setBody(Json.encodeToString(exampleBody))
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(exampleBody))
         }.apply {
             assertEquals(HttpStatusCode.Created, status)
+        }
+    }
+
+    @Ignore("Problem with deserialization. It ignores @serializename annotations and searches for the variable names")
+    @Test
+    fun `GIVEN correct signing in data WHEN signing in THEN 200 ok`() = testApplication {
+        val exampleBody = SignInBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
+        client.post("/user/sign-in") {
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(exampleBody))
+        }.apply {
+            assertEquals(HttpStatusCode.OK, status)
+            val content = json.decodeFromString<SignInResponse>(bodyAsText())
+            assertEquals("testtest@wp.pl", content.email)
         }
     }
 
