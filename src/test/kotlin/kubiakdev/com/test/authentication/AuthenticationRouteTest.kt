@@ -24,6 +24,18 @@ class AuthenticatedRouteTest {
         }
     }
 
+    @Test
+    fun `GIVEN incorrect signing in data WHEN signing in THEN 400 bad request`() = testApplication {
+        client.post("/user/sign-in") {
+            headers {
+                append("Content-Type", ContentType.Application.Json)
+            }
+            setBody(Json.encodeToString(Unit))
+        }.apply {
+            assertEquals(HttpStatusCode.BadRequest, status)
+        }
+    }
+
 //    route("/user/sign-up") {
 //        post {
 //            val body = call.receive<SignUpBody>()
