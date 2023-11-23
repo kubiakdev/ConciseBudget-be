@@ -8,10 +8,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
-import kubiakdev.com.app.authorization.sign.`in`.SignInBody
+import kubiakdev.com.app.authorization.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel
 import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCase
+import kubiakdev.com.domain.route.model.sign.`in`.SignInBody
 import kubiakdev.com.domain.route.model.sign.up.SignUpBody
 import kubiakdev.com.util.mapper.toDomainModel
 
@@ -35,7 +36,7 @@ fun Route.authorizationRoutes() {
         post {
             val body: SignInBody
             try {
-                body = call.receive<SignInBody>()
+                body = call.receive<SignInBodyRouteModel>().toDomainModel()
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest, "Wrong body")
                 return@post
