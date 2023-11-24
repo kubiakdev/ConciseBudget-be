@@ -10,6 +10,8 @@ import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.model.friend.FriendsEntity
+import kubiakdev.com.route.model.FriendsRouteModel
+import kubiakdev.com.util.mapper.toEntityModel
 import kubiakdev.com.util.mapper.toRouteModel
 
 fun Route.friendsRoutes() {
@@ -44,14 +46,14 @@ fun Route.friendsRoutes() {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
                 val friends = try {
-                    call.receive<FriendsEntity>()
+                    call.receive<FriendsRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong friends body")
                     return@post
                 }
 
                 try {
-                    val friendsId = db.create(friends)
+                    val friendsId = db.create(friends.toEntityModel())
                     if (friendsId != null) {
                         call.respond(HttpStatusCode.Created)
                     } else {
@@ -68,14 +70,14 @@ fun Route.friendsRoutes() {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
                 val friends = try {
-                    call.receive<FriendsEntity>()
+                    call.receive<FriendsRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong friends body")
                     return@patch
                 }
 
                 try {
-                    val updated = db.update(friends)
+                    val updated = db.update(friends.toEntityModel())
                     if (updated) {
                         call.respond(HttpStatusCode.NoContent)
                     } else {
