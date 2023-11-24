@@ -1,12 +1,13 @@
 package kubiakdev.com.data.database.model.transaction
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
-import org.litote.kmongo.Id
+import org.bson.types.ObjectId
 
 @Serializable
 data class TransactionEntity(
-    @BsonId var id: Id<String>? = null,
+    @SerialName("_id") @Contextual var id: ObjectId? = null,
     val title: String,
     val date: String,
     val category: String,

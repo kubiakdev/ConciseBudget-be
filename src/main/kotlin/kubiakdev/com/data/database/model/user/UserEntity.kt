@@ -1,12 +1,13 @@
 package kubiakdev.com.data.database.model.user
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
-import org.litote.kmongo.Id
+import org.bson.types.ObjectId
 
 @Serializable
 data class UserEntity(
-    @BsonId var id: Id<String>? = null,
+    @SerialName("_id") @Contextual var id: ObjectId? = null,
     val authUid: String,
     val email: String,
     val publicKey: String,

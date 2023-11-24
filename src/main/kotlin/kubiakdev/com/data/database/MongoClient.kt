@@ -1,7 +1,6 @@
 package kubiakdev.com.data.database
 
-import org.litote.kmongo.coroutine.coroutine
-import org.litote.kmongo.reactivestreams.KMongo
+import com.mongodb.kotlin.client.coroutine.MongoClient
 
-private val client = KMongo.createClient(mongoConnection).coroutine
+private val client = MongoClient.create(mongoConnection)
 val database = client.getDatabase("test")

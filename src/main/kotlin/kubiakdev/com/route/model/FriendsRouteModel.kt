@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FriendsRouteModel(
-    @SerialName("id") var id: String,
+    @SerialName("id") val id: String? = null,
     @SerialName("ownerId") val ownerId: String,
     @SerialName("friends") val friends: List<FriendRouteModel>,
 )
