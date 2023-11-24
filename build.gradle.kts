@@ -30,6 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-config-yaml:2.3.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     // Authentication
     implementation("io.ktor:ktor-server-auth:$ktor_version")
@@ -43,9 +44,7 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:1.6.6")
 
     // Mongo
-    implementation("org.litote.kmongo:kmongo:4.11.0")
-    implementation("org.litote.kmongo:kmongo-coroutine:4.11.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.0")
 
     // Serialization
     implementation("io.ktor:ktor-serialization:$ktor_version")
