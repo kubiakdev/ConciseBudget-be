@@ -12,12 +12,7 @@ class TransactionDao {
     private val collection = database.getCollection<TransactionEntity>("transaction")
 
     suspend fun loadAll(userId: String): List<TransactionEntity> =
-        collection.find(
-            eq(
-                "parts.userId",
-                userId
-            )
-        ).toList()
+        collection.find(eq("parts.userId", userId)).toList()
 
     suspend fun create(transaction: TransactionEntity): ObjectId? =
         collection.insertOne(transaction).insertedId?.asObjectId()?.value

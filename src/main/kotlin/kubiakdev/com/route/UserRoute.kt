@@ -9,7 +9,9 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.UserDao
-import kubiakdev.com.data.database.model.user.UserEntity
+import kubiakdev.com.route.model.user.UserRouteModel
+import kubiakdev.com.util.mapper.toEntityModel
+import kubiakdev.com.util.mapper.toRouteModel
 
 fun Route.userRoutes() {
     val db = UserDao()
@@ -26,7 +28,7 @@ fun Route.userRoutes() {
                 }
 
                 try {
-                    val user = db.getById(id)
+                    val user = db.getById(id)?.toRouteModel()
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
                     } else {
@@ -38,7 +40,7 @@ fun Route.userRoutes() {
             }
         }
 
-        route("/user/{email}") {
+        route("/user/byEmail/{email}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -49,7 +51,7 @@ fun Route.userRoutes() {
                 }
 
                 try {
-                    val user = db.getByEmail(email)
+                    val user = db.getByEmail(email)?.toRouteModel()
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
                     } else {
@@ -61,7 +63,7 @@ fun Route.userRoutes() {
             }
         }
 
-        route("/user/{authUid}") {
+        route("/user/byAuthId/{authUid}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -72,7 +74,7 @@ fun Route.userRoutes() {
                 }
 
                 try {
-                    val user = db.getByAuthUid(authUid)
+                    val user = db.getByAuthUid(authUid)?.toRouteModel()
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
                     } else {
@@ -89,14 +91,14 @@ fun Route.userRoutes() {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
                 val user = try {
-                    call.receive<UserEntity>()
+                    call.receive<UserRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong user body")
                     return@post
                 }
 
                 try {
-                    val userId = db.addUser(user)
+                    val userId = db.addUser(user.toEntityModel())
                     if (userId != null) {
                         call.respond(HttpStatusCode.Created)
                     } else {
