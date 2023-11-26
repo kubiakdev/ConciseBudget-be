@@ -1,4 +1,4 @@
-package kubiakdev.com.app.authorization.firebase
+package kubiakdev.com.app.authorization.firebase.util
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseToken
@@ -9,9 +9,9 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-// todo refactor it
 class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(config) {
-    val authHeader: (ApplicationCall) -> HttpAuthHeader? = config.authHeader
+
+    private val authHeader: (ApplicationCall) -> HttpAuthHeader? = config.authHeader
     private val authFunction = config.firebaseAuthenticationFunction
 
     override suspend fun onAuthenticate(context: AuthenticationContext) {

@@ -6,7 +6,7 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.encodeToString
-import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 import kubiakdev.com.app.authorization.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authorization.sign.`in`.SignInResponse
 import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel

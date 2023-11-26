@@ -1,8 +1,8 @@
 package kubiakdev.com.test.authentication.util
 
 import io.ktor.server.auth.*
-import kubiakdev.com.app.authorization.firebase.FirebaseJWTAuthKey
-import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.firebase.util.FirebaseJWTAuthKey
+import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 
 class FirebaseAuthTestProvider(config: FirebaseTestConfig) : AuthenticationProvider(config) {
 

@@ -6,8 +6,8 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
-import kubiakdev.com.app.authorization.firebase.FirebaseUser
+import kubiakdev.com.app.authorization.firebase.util.FIREBASE_AUTH
+import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.route.model.friend.FriendsRouteModel
 import kubiakdev.com.util.mapper.toEntityModel
