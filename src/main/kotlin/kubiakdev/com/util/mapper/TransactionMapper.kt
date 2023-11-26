@@ -23,7 +23,7 @@ private fun TransactionPartEntity.toRouteModel() = TransactionPartRouteModel(
 )
 
 fun TransactionRouteModel.toEntityModel() = TransactionEntity(
-    id = ObjectId(id),
+    id = id?.let { ObjectId(it) },
     title = title,
     date = date,
     category = category,

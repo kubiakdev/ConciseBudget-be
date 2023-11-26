@@ -9,7 +9,7 @@ import org.bson.types.ObjectId
 
 @Serializable
 data class TransactionEntity(
-    @SerialName("_id") @BsonId @Contextual @BsonProperty("_id") var id: ObjectId? = null,
+   @BsonId @Contextual @BsonProperty("_id") var id: ObjectId? = null,
     val title: String,
     val date: String,
     val category: String,

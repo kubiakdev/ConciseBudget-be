@@ -10,6 +10,9 @@ import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
 import kubiakdev.com.data.database.model.transaction.TransactionEntity
+import kubiakdev.com.route.model.transaction.TransactionRouteModel
+import kubiakdev.com.util.mapper.toEntityModel
+import kubiakdev.com.util.mapper.toRouteModel
 
 fun Route.transactionRoutes() {
     val db = TransactionDao()
@@ -26,8 +29,7 @@ fun Route.transactionRoutes() {
                 }
 
                 try {
-                    val transactions = db.loadAll(userId)
-                    // todo to route model
+                    val transactions = db.loadAll(userId).map { it.toRouteModel() }
                     call.respond(HttpStatusCode.OK, transactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
@@ -40,14 +42,15 @@ fun Route.transactionRoutes() {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
                 val transaction = try {
-                    call.receive<TransactionEntity>()
+                    call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
+                    val c = e
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
                     return@post
                 }
 
                 try {
-                    val transactionId = db.create(transaction)
+                    val transactionId = db.create(transaction.toEntityModel())
                     if (transactionId != null) {
                         call.respond(HttpStatusCode.Created)
                     } else {
@@ -64,14 +67,14 @@ fun Route.transactionRoutes() {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
                 val transaction = try {
-                    call.receive<TransactionEntity>()
+                    call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
                     return@patch
                 }
 
                 try {
-                    val updated = db.update(transaction)
+                    val updated = db.update(transaction.toEntityModel())
                     if (updated) {
                         call.respond(HttpStatusCode.NoContent)
                     } else {
