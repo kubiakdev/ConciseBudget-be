@@ -13,7 +13,7 @@ fun Application.configureAuthentication() {
     install(Authentication) {
         firebase {
             validate {
-                FirebaseUser(it.uid, it.email)
+                FirebaseUser(userId = it.uid, email = it.email)
             }
         }
     }

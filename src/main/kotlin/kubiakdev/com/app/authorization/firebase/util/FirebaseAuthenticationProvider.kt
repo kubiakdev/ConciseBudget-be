@@ -9,13 +9,10 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(config) {
-
-    private val authHeader: (ApplicationCall) -> HttpAuthHeader? = config.authHeader
-    private val authFunction = config.firebaseAuthenticationFunction
+class FirebaseAuthProvider(private val config: FirebaseConfig) : AuthenticationProvider(config) {
 
     override suspend fun onAuthenticate(context: AuthenticationContext) {
-        val token = authHeader(context.call)
+        val token = config.parseToken(context.call)
 
         if (token == null) {
             context.challenge(
@@ -29,7 +26,7 @@ class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(conf
         }
 
         try {
-            val principal = verifyFirebaseIdToken(context.call, token, authFunction)
+            val principal = verifyFirebaseIdToken(context.call, token, config.firebaseAuthenticationFunction)
 
             if (principal != null) {
                 context.principal(principal)

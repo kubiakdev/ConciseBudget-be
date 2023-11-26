@@ -7,18 +7,19 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 
 class FirebaseConfig(name: String?) : AuthenticationProvider.Config(name) {
-    internal var authHeader: (ApplicationCall) -> HttpAuthHeader? =
-        { call -> call.request.parseAuthorizationHeaderOrNull() }
 
     var firebaseAuthenticationFunction: AuthenticationFunction<FirebaseToken> = {
         throw NotImplementedError(
             "Firebase auth validate function is not specified, use firebase { validate { ... } } to fix this"
         )
     }
+        private set
 
     fun validate(validate: suspend ApplicationCall.(FirebaseToken) -> FirebaseUser?) {
         firebaseAuthenticationFunction = validate
     }
+
+    fun parseToken(call: ApplicationCall): HttpAuthHeader? = call.request.parseAuthorizationHeaderOrNull()
 
     private fun ApplicationRequest.parseAuthorizationHeaderOrNull(): HttpAuthHeader? = try {
         parseAuthorizationHeader()
