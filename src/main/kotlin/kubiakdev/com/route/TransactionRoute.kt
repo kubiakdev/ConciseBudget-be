@@ -15,7 +15,7 @@ fun Route.transactionRoutes() {
     val db = TransactionDao()
 
     authenticate(FIREBASE_AUTH) {
-        route("/transaction/{userId}") {
+        route("/transactions/{userId}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -27,6 +27,7 @@ fun Route.transactionRoutes() {
 
                 try {
                     val transactions = db.loadAll(userId)
+                    // todo to route model
                     call.respond(HttpStatusCode.OK, transactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())

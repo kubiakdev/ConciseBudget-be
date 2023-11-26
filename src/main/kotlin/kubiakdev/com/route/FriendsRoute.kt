@@ -9,8 +9,7 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authorization.firebase.FIREBASE_AUTH
 import kubiakdev.com.app.authorization.firebase.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
-import kubiakdev.com.data.database.model.friend.FriendsEntity
-import kubiakdev.com.route.model.FriendsRouteModel
+import kubiakdev.com.route.model.friend.FriendsRouteModel
 import kubiakdev.com.util.mapper.toEntityModel
 import kubiakdev.com.util.mapper.toRouteModel
 
