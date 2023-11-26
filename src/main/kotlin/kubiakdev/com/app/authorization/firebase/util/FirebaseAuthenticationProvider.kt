@@ -1,65 +1,61 @@
 package kubiakdev.com.app.authorization.firebase.util
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseToken
 import io.ktor.http.auth.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.AUTH_SCHEME
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FirebaseJWTAuthKey
 
-class FirebaseAuthProvider(private val config: FirebaseConfig) : AuthenticationProvider(config) {
+class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(config) {
+
+    private val tokenParser = TokenParser()
+    private val tokenVerifier = TokenVerifier()
+
+    private lateinit var principalCreationMethod: AuthenticationFunction<FirebaseToken>
+
+    fun setPrincipalCreationMethod(method: suspend ApplicationCall.(FirebaseToken) -> FirebaseUser?) {
+        principalCreationMethod = method
+    }
 
     override suspend fun onAuthenticate(context: AuthenticationContext) {
-        val token = config.parseToken(context.call)
+        val token = tokenParser.parseToken(context.call)
 
         if (token == null) {
-            context.challenge(
-                FirebaseJWTAuthKey,
-                AuthenticationFailedCause.InvalidCredentials
-            ) { challengeFunc, call ->
-                challengeFunc.complete()
-                call.respond(UnauthorizedResponse(HttpAuthHeader.bearerAuthChallenge(realm = FIREBASE_AUTH)))
-            }
+            requestForAuthenticateOnNullToken(context)
             return
         }
 
         try {
-            val principal = verifyFirebaseIdToken(context.call, token, config.firebaseAuthenticationFunction)
+            val principalUser = tokenVerifier.verifyFirebaseIdToken(
+                call = context.call,
+                authHeader = token,
+                principalCreationMethod = principalCreationMethod
+            )
 
-            if (principal != null) {
-                context.principal(principal)
+            if (principalUser != null) {
+                context.principal(principalUser)
             }
         } catch (cause: Throwable) {
             val message = cause.message ?: cause.javaClass.simpleName
             context.error(FirebaseJWTAuthKey, AuthenticationFailedCause.Error(message))
         }
     }
-}
 
-suspend fun verifyFirebaseIdToken(
-    call: ApplicationCall,
-    authHeader: HttpAuthHeader,
-    tokenData: suspend ApplicationCall.(FirebaseToken) -> Principal?
-): Principal? {
-    val token: FirebaseToken = try {
-        if (authHeader.authScheme == "Bearer" && authHeader is HttpAuthHeader.Single) {
-            withContext(Dispatchers.IO) {
-                FirebaseAuth.getInstance().verifyIdToken(authHeader.blob)
-            }
-        } else {
-            null
+    private fun requestForAuthenticateOnNullToken(context: AuthenticationContext) {
+        context.challenge(
+            key = FirebaseJWTAuthKey,
+            cause = AuthenticationFailedCause.InvalidCredentials
+        ) { challengeFunc, call ->
+            challengeFunc.complete()
+            call.respond(
+                UnauthorizedResponse(HttpAuthHeader.bearerAuthChallenge(realm = FIREBASE_AUTH_CONFIGURATION_NAME))
+            )
         }
-    } catch (ex: Exception) {
-        ex.printStackTrace()
-        return null
-    } ?: return null
-    return tokenData(call, token)
+    }
+
+    private fun HttpAuthHeader.Companion.bearerAuthChallenge(realm: String): HttpAuthHeader =
+        HttpAuthHeader.Parameterized(AUTH_SCHEME, mapOf(HttpAuthHeader.Parameters.Realm to realm))
 }
-
-fun HttpAuthHeader.Companion.bearerAuthChallenge(realm: String): HttpAuthHeader =
-    HttpAuthHeader.Parameterized("Bearer", mapOf(HttpAuthHeader.Parameters.Realm to realm))
-
-const val FIREBASE_AUTH = "FIREBASE_AUTH"
-const val FirebaseJWTAuthKey: String = "FirebaseAuth"

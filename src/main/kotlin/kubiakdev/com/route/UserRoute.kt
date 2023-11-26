@@ -6,7 +6,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kubiakdev.com.app.authorization.firebase.util.FIREBASE_AUTH
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 import kubiakdev.com.app.authorization.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authorization.sign.`in`.SignInResponse
@@ -58,7 +58,7 @@ fun Route.userRoutes() {
         }
     }
 
-    authenticate(FIREBASE_AUTH) {
+    authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         get("/authenticated") {
             val user: FirebaseUser =
                 call.principal() ?: return@get call.respond(HttpStatusCode.Unauthorized)
@@ -66,7 +66,7 @@ fun Route.userRoutes() {
         }
     }
 
-    authenticate(FIREBASE_AUTH) {
+    authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/user/{id}") {
             get {
                 call.principal<FirebaseUser>() ?:  return@get call.respond(HttpStatusCode.Unauthorized)

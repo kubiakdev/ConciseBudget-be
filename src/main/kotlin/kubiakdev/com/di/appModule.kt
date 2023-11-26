@@ -1,5 +1,6 @@
 package kubiakdev.com.di
 
+import com.google.firebase.auth.FirebaseAuth
 import kubiakdev.com.app.authorization.firebase.FirebaseAppInitializer
 import kubiakdev.com.app.authorization.sign.`in`.SignInUserUseCaseImpl
 import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCaseImpl
@@ -11,4 +12,5 @@ val appModule = module {
     single { FirebaseAppInitializer() }
     single<SignUpUserUseCase> { SignUpUserUseCaseImpl() }
     single<SignInUserUseCase> { SignInUserUseCaseImpl() }
+    single<FirebaseAuth> { FirebaseAuth.getInstance() }
 }

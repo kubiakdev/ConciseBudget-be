@@ -6,7 +6,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kubiakdev.com.app.authorization.firebase.util.FIREBASE_AUTH
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.route.model.friend.FriendsRouteModel
@@ -16,7 +16,7 @@ import kubiakdev.com.util.mapper.toRouteModel
 fun Route.friendsRoutes() {
     val db = FriendsDao()
 
-    authenticate(FIREBASE_AUTH) {
+    authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/friends/{ownerId}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
