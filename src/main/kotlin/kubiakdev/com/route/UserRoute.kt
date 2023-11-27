@@ -53,23 +53,16 @@ fun Route.userRoutes() {
                 return@post
             }
 
-            val response: Response<SignInResponse> = signInUseCase.signInUser(email = body.email, password = body.password)
+            val response: Response<SignInResponse> =
+                signInUseCase.signInUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
-        }
-    }
-
-    authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        get("/authenticated") {
-            val user: FirebaseUser =
-                call.principal() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            call.respond("User is authenticated: $user")
         }
     }
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/user/{id}") {
             get {
-                call.principal<FirebaseUser>() ?:  return@get call.respond(HttpStatusCode.Unauthorized)
+                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 val id = call.parameters["id"]
                 if (id == null) {

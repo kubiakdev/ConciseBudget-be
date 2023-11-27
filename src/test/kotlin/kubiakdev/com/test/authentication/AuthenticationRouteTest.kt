@@ -35,7 +35,7 @@ class AuthenticatedRouteTest {
         }
     }
 
-    // todo remove it at the end
+    // todo remove the user at the end
     @Test
     fun `GIVEN correct signing up data WHEN signing up THEN 201 created`() = testApplication {
         val exampleBody = SignUpBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
@@ -59,47 +59,4 @@ class AuthenticatedRouteTest {
             assertEquals("testtest@wp.pl", content.email)
         }
     }
-
-//    route("/user/sign-up") {
-//        post {
-//            val body = call.receive<SignUpBody>()
-//            val response = SignUpUserUseCase.signUpUser(email = body.email, password = body.password)
-//            call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
-//        }
-//    }
-
-
-    // todo test there the whole flow with also removing the user
-    @Test
-    fun `authenticated route - is authenticated`() = testApplication {
-        val user = FirebaseUser("some id", "Andrew")
-
-//        mockAuthentication { user }
-//        routing { authorizationRoutes() }
-
-        client.get("/authenticated", {
-            headers {
-                append("Authorization", "Bearer $EXAMPLE_TOKEN")
-            }
-        }).apply {
-            assertEquals(HttpStatusCode.OK, status)
-            assertEquals("User is authenticated: $user", bodyAsText())
-        }
-    }
-
-    @Test
-    fun `authenticated route - is unauthorized`() = testApplication {
-//        mockAuthentication { null }
-//        routing { authorizationRoutes() }
-
-        client.get("/authenticated", {
-            headers {
-                append("Authorization", "Bearer $EXAMPLE_TOKEN")
-            }
-        }).apply {
-            assertEquals(HttpStatusCode.Unauthorized, status)
-        }
-    }
-
-    private val EXAMPLE_TOKEN = "put there example token"
 }
