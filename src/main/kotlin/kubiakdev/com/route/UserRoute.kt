@@ -11,6 +11,7 @@ import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 import kubiakdev.com.app.authorization.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authorization.sign.`in`.SignInResponse
 import kubiakdev.com.app.authorization.sign.up.SignUpBodyRouteModel
+import kubiakdev.com.app.authorization.sign.up.SignUpResponse
 import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
@@ -38,7 +39,7 @@ fun Route.userRoutes() {
                 return@post
             }
 
-            val response = signUpUseCase.signUpUser(email = body.email, password = body.password)
+            val response: Response<SignUpResponse> = signUpUseCase.signUpUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
     }

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignUpResponse(
-    @SerialName("localId") val id: String,
+    @SerialName("authId") val id: String,
     @SerialName("email") val email: String,
-    @SerialName("idToken") val token: String,
+    @SerialName("token") val token: String,
     @SerialName("refreshToken") val refreshToken: String,
 )
