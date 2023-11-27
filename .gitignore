@@ -32,6 +32,6 @@ out/
 /nbdist/
 /.nb-gradle/
 
-MongoConnection.kt
+src/main/kotlin/kubiakdev/com/data/database/MongoConnection.kt
 src/main/kotlin/kubiakdev/com/app/authorization/firebase/FirebaseConnection.kt
 src/main/resources/firebase-adminsdk.json
