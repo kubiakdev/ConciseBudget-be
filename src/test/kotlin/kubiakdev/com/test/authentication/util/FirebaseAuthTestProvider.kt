@@ -1,7 +1,7 @@
 package kubiakdev.com.test.authentication.util
 
 import io.ktor.server.auth.*
-import kubiakdev.com.app.authorization.firebase.util.FirebaseJWTAuthKey
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst
 import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
 
 class FirebaseAuthTestProvider(config: FirebaseTestConfig) : AuthenticationProvider(config) {
@@ -14,7 +14,7 @@ class FirebaseAuthTestProvider(config: FirebaseTestConfig) : AuthenticationProvi
             context.principal(mockUser)
         } else {
             context.error(
-                FirebaseJWTAuthKey,
+                AuthenticationConst.FIREBASE_JWT_AUTH_KEY,
                 AuthenticationFailedCause.Error("User was mocked to be unauthenticated")
             )
         }

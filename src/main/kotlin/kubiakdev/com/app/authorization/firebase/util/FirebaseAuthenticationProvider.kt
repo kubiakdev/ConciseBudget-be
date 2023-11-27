@@ -7,7 +7,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.AUTH_SCHEME
 import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
-import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FirebaseJWTAuthKey
+import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_JWT_AUTH_KEY
 
 class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(config) {
 
@@ -40,13 +40,13 @@ class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(conf
             }
         } catch (cause: Throwable) {
             val message = cause.message ?: cause.javaClass.simpleName
-            context.error(FirebaseJWTAuthKey, AuthenticationFailedCause.Error(message))
+            context.error(FIREBASE_JWT_AUTH_KEY, AuthenticationFailedCause.Error(message))
         }
     }
 
     private fun requestForAuthenticateOnNullToken(context: AuthenticationContext) {
         context.challenge(
-            key = FirebaseJWTAuthKey,
+            key = FIREBASE_JWT_AUTH_KEY,
             cause = AuthenticationFailedCause.InvalidCredentials
         ) { challengeFunc, call ->
             challengeFunc.complete()
