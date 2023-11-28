@@ -5,7 +5,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kubiakdev.com.app.authorization.firebase.firebaseApiKey
 import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.util.Response
 import kubiakdev.com.util.provider.httpClient
@@ -26,7 +25,7 @@ class SignInUserUseCaseImpl : SignInUserUseCase {
         val bodyJson = Json.encodeToString(body)
 
         val response: HttpResponse = httpClient.request(
-            url = Url("$SIGN_IN_FIREBASE_URL?key=$firebaseApiKey"),
+            url = Url("$SIGN_IN_FIREBASE_URL?key=${System.getenv("firebase_api_key")}"),
             block = {
                 method = HttpMethod.Post
                 contentType(ContentType.Application.Json)
@@ -37,8 +36,9 @@ class SignInUserUseCaseImpl : SignInUserUseCase {
 
         return try {
             if (response.status.isSuccess()) {
+                val firebaseResponse = json.decodeFromString<SignInFirebaseResponse>(response.bodyAsText())
                 Response(
-                    Result.success(json.decodeFromString<SignInResponse>(response.bodyAsText())),
+                    Result.success(firebaseResponse.toFinalResponseModel()),
                     HttpStatusCode.OK
                 )
             } else {

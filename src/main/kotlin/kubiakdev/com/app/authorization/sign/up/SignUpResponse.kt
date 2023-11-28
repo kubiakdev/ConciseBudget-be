@@ -10,3 +10,10 @@ data class SignUpResponse(
     @SerialName("token") val token: String,
     @SerialName("refreshToken") val refreshToken: String,
 )
+
+fun SignUpFirebaseResponse.toFinalResponseModel() = SignUpResponse(
+    id = id,
+    email = email,
+    token = token,
+    refreshToken = refreshToken
+)

@@ -10,3 +10,10 @@ data class SignInResponse(
     @SerialName("token") val token: String,
     @SerialName("refreshToken") val refreshToken: String,
 )
+
+fun SignInFirebaseResponse.toFinalResponseModel() = SignInResponse(
+    id = id,
+    email = email,
+    token = token,
+    refreshToken = refreshToken
+)
