@@ -17,7 +17,7 @@ class FirebaseAppInitializer {
         .setDatabaseUrl(DATABASE_URL)
         .build()
 
-    private fun getServiceAccount(): InputStream = File(JSON_FILE_NAME).inputStream()
+    private fun getServiceAccount(): InputStream = File("/", JSON_FILE_NAME).inputStream()
 
     private companion object {
         private const val DATABASE_URL = "https://concisebudget-default-rtdb.europe-west1.firebasedatabase.app"
