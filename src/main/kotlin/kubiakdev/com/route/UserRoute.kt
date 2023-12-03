@@ -29,6 +29,12 @@ fun Route.userRoutes() {
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()
 
+    route("/") {
+        get {
+            call.respond(HttpStatusCode.OK, "Hello world")
+        }
+    }
+
     route("/user/sign-up") {
         post {
             val body: SignUpBody
@@ -39,7 +45,8 @@ fun Route.userRoutes() {
                 return@post
             }
 
-            val response: Response<SignUpResponse> = signUpUseCase.signUpUser(email = body.email, password = body.password)
+            val response: Response<SignUpResponse> =
+                signUpUseCase.signUpUser(email = body.email, password = body.password)
             call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
         }
     }
