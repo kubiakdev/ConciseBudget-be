@@ -1,4 +1,4 @@
-package kubiakdev.com.route
+package kubiakdev.com.route.transaction.v1
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
-import kubiakdev.com.route.model.transaction.TransactionRouteModel
+import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
 import kubiakdev.com.util.mapper.toEntityModel
 import kubiakdev.com.util.mapper.toRouteModel
 
@@ -17,7 +17,7 @@ fun Route.transactionRoutes() {
     val db = TransactionDao()
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/transactions/{userId}") {
+        route("/v1/transactions/{userId}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -36,7 +36,7 @@ fun Route.transactionRoutes() {
             }
         }
 
-        route("/transaction") {
+        route("/v1/transaction") {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
@@ -61,7 +61,7 @@ fun Route.transactionRoutes() {
             }
         }
 
-        route("/transaction") {
+        route("/v1/transaction") {
             patch {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
@@ -85,7 +85,7 @@ fun Route.transactionRoutes() {
             }
         }
 
-        route("/transaction/{id}") {
+        route("/v1/transaction/{id}") {
             delete {
                 call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 

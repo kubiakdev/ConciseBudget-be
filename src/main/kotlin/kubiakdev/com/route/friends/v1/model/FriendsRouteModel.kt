@@ -1,4 +1,4 @@
-package kubiakdev.com.route.model.friend
+package kubiakdev.com.route.friends.v1.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

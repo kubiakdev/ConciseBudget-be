@@ -1,4 +1,4 @@
-package kubiakdev.com.route
+package kubiakdev.com.route.friends.v1
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.FriendsDao
-import kubiakdev.com.route.model.friend.FriendsRouteModel
+import kubiakdev.com.route.friends.v1.model.FriendsRouteModel
 import kubiakdev.com.util.mapper.toEntityModel
 import kubiakdev.com.util.mapper.toRouteModel
 
@@ -17,7 +17,7 @@ fun Route.friendsRoutes() {
     val db = FriendsDao()
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/friends/{ownerId}") {
+        route("/v1/friends/{ownerId}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -40,7 +40,7 @@ fun Route.friendsRoutes() {
             }
         }
 
-        route("/friends") {
+        route("/v1/friends") {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
@@ -64,7 +64,7 @@ fun Route.friendsRoutes() {
             }
         }
 
-        route("/friends") {
+        route("/v1/friends") {
             patch {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 

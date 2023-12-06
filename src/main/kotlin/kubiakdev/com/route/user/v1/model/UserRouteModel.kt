@@ -1,4 +1,4 @@
-package kubiakdev.com.route.model.user
+package kubiakdev.com.route.user.v1.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,4 +1,4 @@
-package kubiakdev.com.route
+package kubiakdev.com.route.user.v1
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -17,7 +17,7 @@ import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import kubiakdev.com.domain.route.model.sign.`in`.SignInBody
 import kubiakdev.com.domain.route.model.sign.up.SignUpBody
-import kubiakdev.com.route.model.user.UserRouteModel
+import kubiakdev.com.route.user.v1.model.UserRouteModel
 import kubiakdev.com.util.Response
 import kubiakdev.com.util.mapper.toDomainModel
 import kubiakdev.com.util.mapper.toEntityModel
@@ -35,7 +35,7 @@ fun Route.userRoutes() {
         }
     }
 
-    route("/user/sign-up") {
+    route("/v1/user/sign-up") {
         post {
             val body: SignUpBody
             try {
@@ -51,7 +51,7 @@ fun Route.userRoutes() {
         }
     }
 
-    route("/user/sign-in") {
+    route("/v1/user/sign-in") {
         post {
             val body: SignInBody
             try {
@@ -68,7 +68,7 @@ fun Route.userRoutes() {
     }
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/user/{id}") {
+        route("/v1/user/{id}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -91,7 +91,7 @@ fun Route.userRoutes() {
             }
         }
 
-        route("/user/byEmail/{email}") {
+        route("/v1/user/byEmail/{email}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -114,7 +114,7 @@ fun Route.userRoutes() {
             }
         }
 
-        route("/user/byAuthId/{authUid}") {
+        route("/v1/user/byAuthId/{authUid}") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -137,7 +137,7 @@ fun Route.userRoutes() {
             }
         }
 
-        route("/user") {
+        route("/v1/user") {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
@@ -161,7 +161,7 @@ fun Route.userRoutes() {
             }
         }
 
-        route("/user/{id}") {
+        route("/v1/user/{id}") {
             delete {
                 call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 

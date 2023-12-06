@@ -1,4 +1,4 @@
-package kubiakdev.com.route.model.transaction
+package kubiakdev.com.route.transaction.v1.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
