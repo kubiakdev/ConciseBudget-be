@@ -1,13 +1,13 @@
-package kubiakdev.com.app.authorization.firebase.util
+package kubiakdev.com.app.authentication.firebase.util
 
 import com.google.firebase.auth.FirebaseToken
 import io.ktor.http.auth.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
-import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.AUTH_SCHEME
-import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
-import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_JWT_AUTH_KEY
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.AUTH_SCHEME
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_JWT_AUTH_KEY
 
 class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(config) {
 

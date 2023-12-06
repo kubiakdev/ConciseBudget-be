@@ -1,4 +1,4 @@
-package kubiakdev.com.app.authorization.sign.up
+package kubiakdev.com.app.authentication.sign.up
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,4 +1,4 @@
-package kubiakdev.com.app.authorization.sign.`in`
+package kubiakdev.com.app.authentication.sign.`in`
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

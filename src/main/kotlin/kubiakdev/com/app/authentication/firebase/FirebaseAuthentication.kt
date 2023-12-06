@@ -1,11 +1,11 @@
-package kubiakdev.com.app.authorization.firebase
+package kubiakdev.com.app.authentication.firebase
 
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
-import kubiakdev.com.app.authorization.firebase.util.FirebaseAuthProvider
-import kubiakdev.com.app.authorization.firebase.util.FirebaseConfig
-import kubiakdev.com.app.authorization.firebase.util.FirebaseUser
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
+import kubiakdev.com.app.authentication.firebase.util.FirebaseAuthProvider
+import kubiakdev.com.app.authentication.firebase.util.FirebaseConfig
+import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import org.koin.ktor.ext.inject
 
 fun Application.configureAuthentication() {

@@ -1,4 +1,4 @@
-package kubiakdev.com.app.authorization.firebase.util
+package kubiakdev.com.app.authentication.firebase.util
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseToken
@@ -7,7 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kubiakdev.com.app.authorization.firebase.util.AuthenticationConst.AUTH_SCHEME
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.AUTH_SCHEME
 
 class TokenVerifier {
 

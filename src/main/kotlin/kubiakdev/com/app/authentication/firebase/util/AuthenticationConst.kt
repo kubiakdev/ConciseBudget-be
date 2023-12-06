@@ -1,4 +1,4 @@
-package kubiakdev.com.app.authorization.firebase.util
+package kubiakdev.com.app.authentication.firebase.util
 
 object AuthenticationConst {
     const val FIREBASE_AUTH_CONFIGURATION_NAME = "FIREBASE_AUTH"

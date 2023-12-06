@@ -1,4 +1,4 @@
-package kubiakdev.com.app.authorization.firebase
+package kubiakdev.com.app.authentication.firebase
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp

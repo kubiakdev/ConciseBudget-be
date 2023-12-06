@@ -33,5 +33,5 @@ out/
 /.nb-gradle/
 
 src/main/kotlin/kubiakdev/com/data/database/MongoConnection.kt
-src/main/kotlin/kubiakdev/com/app/authorization/firebase/FirebaseConnection.kt
+src/main/kotlin/kubiakdev/com/app/authentication/firebase/FirebaseConnection.kt
 /firebase-adminsdk.json
