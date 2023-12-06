@@ -17,7 +17,7 @@ fun Route.friendsRoutes() {
     val db = FriendsDao()
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/v1/friends/{ownerId}") {
+        route("/v1/friends") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -38,9 +38,7 @@ fun Route.friendsRoutes() {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
             }
-        }
 
-        route("/v1/friends") {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
@@ -62,9 +60,7 @@ fun Route.friendsRoutes() {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
             }
-        }
 
-        route("/v1/friends") {
             patch {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
