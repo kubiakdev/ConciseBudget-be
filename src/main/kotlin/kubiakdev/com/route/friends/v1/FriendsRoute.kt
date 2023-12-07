@@ -19,16 +19,10 @@ fun Route.friendsRoutes() {
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/v1/friends") {
             get {
-                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-                val ownerId = call.parameters["ownerId"]
-                if (ownerId == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong ownerId param")
-                    return@get
-                }
+                val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val friends = db.loadAll(ownerId)?.toRouteModel()
+                    val friends = db.loadAll(ownerUserId = principal.userId)?.toRouteModel()
                     if (friends != null) {
                         call.respond(HttpStatusCode.OK, friends)
                     } else {
@@ -42,6 +36,7 @@ fun Route.friendsRoutes() {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
+                // todo add validation that only friends owner can add friends list, get data from principal
                 val friends = try {
                     call.receive<FriendsRouteModel>()
                 } catch (e: Exception) {
@@ -64,6 +59,7 @@ fun Route.friendsRoutes() {
             patch {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
+                // todo add validation that only friends owner can edit friends list, get data from principal
                 val friends = try {
                     call.receive<FriendsRouteModel>()
                 } catch (e: Exception) {
