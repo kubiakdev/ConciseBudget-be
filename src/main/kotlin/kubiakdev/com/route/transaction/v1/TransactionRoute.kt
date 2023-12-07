@@ -20,16 +20,10 @@ fun Route.transactionRoutes() {
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/v1/transactions") {
             get {
-                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-                val userId = call.parameters["userId"]
-                if (userId == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong userId param")
-                    return@get
-                }
+                val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val transactions = db.loadAll(userId).map { it.toRouteModel() }
+                    val transactions = db.loadAll(principal.userId).map { it.toRouteModel() }
                     call.respond(HttpStatusCode.OK, transactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
@@ -41,6 +35,7 @@ fun Route.transactionRoutes() {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
+                // todo add validation from principal that only transaction part user can add transaction
                 val transaction = try {
                     call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
@@ -63,6 +58,7 @@ fun Route.transactionRoutes() {
             patch {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
+                // todo add validation from principal that only transaction part user can edit transaction
                 val transaction = try {
                     call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
@@ -85,6 +81,7 @@ fun Route.transactionRoutes() {
             delete {
                 call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
+                // todo add validation from principal that only transaction part user can remove transaction
                 val id = call.parameters["id"]
                 if (id == null) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong id param")
