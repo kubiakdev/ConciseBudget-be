@@ -16,8 +16,9 @@ import kubiakdev.com.util.mapper.toRouteModel
 fun Route.transactionRoutes() {
     val db = TransactionDao()
 
+    // todo unify the endpoints and use the base bearer token for validating login and signup
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/v1/transactions/{userId}") {
+        route("/v1/transactions") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
