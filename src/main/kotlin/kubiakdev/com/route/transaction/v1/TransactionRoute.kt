@@ -44,7 +44,6 @@ fun Route.transactionRoutes() {
                 val transaction = try {
                     call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
-                    val c = e
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
                     return@post
                 }
@@ -60,9 +59,7 @@ fun Route.transactionRoutes() {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
             }
-        }
 
-        route("/v1/transaction") {
             patch {
                 call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
@@ -84,9 +81,7 @@ fun Route.transactionRoutes() {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
             }
-        }
 
-        route("/v1/transaction/{id}") {
             delete {
                 call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
