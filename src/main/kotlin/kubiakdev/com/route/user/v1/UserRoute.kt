@@ -70,23 +70,10 @@ fun Route.userRoutes() {
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/v1/user") {
             get {
-                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-                val id: String? = call.parameters["id"]
-                val authId: String? = call.parameters["authId"]
-                val email: String? = call.parameters["email"]
-                if (id == null && authId == null && email == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong id param")
-                    return@get
-                }
+                val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val user = when {
-                        id != null -> db.getById(id)?.toRouteModel()
-                        authId != null -> db.getByAuthUid(authId)?.toRouteModel()
-                        email != null -> db.getByEmail(email)?.toRouteModel()
-                        else -> throw IllegalArgumentException()
-                    }
+                    val user = db.getByAuthUid(principal.userId)?.toRouteModel()
 
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
@@ -101,6 +88,7 @@ fun Route.userRoutes() {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
+                // todo add restriction that only user id can post a method with his id
                 val user = try {
                     call.receive<UserRouteModel>()
                 } catch (e: Exception) {
@@ -120,6 +108,7 @@ fun Route.userRoutes() {
                 }
             }
 
+            // todo add restriction that only user id can delete a method with his id
             delete {
                 call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 

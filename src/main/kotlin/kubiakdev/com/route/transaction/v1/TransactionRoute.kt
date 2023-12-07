@@ -23,7 +23,7 @@ fun Route.transactionRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val transactions = db.loadAll(principal.userId).map { it.toRouteModel() }
+                    val transactions = db.loadAll(userId = principal.userId).map { it.toRouteModel() }
                     call.respond(HttpStatusCode.OK, transactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
