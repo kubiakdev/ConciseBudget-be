@@ -68,18 +68,26 @@ fun Route.userRoutes() {
     }
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/v1/user/{id}") {
+        route("/v1/user") {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
-                val id = call.parameters["id"]
-                if (id == null) {
+                val id: String? = call.parameters["id"]
+                val authId: String? = call.parameters["authId"]
+                val email: String? = call.parameters["email"]
+                if (id == null && authId == null && email == null) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong id param")
                     return@get
                 }
 
                 try {
-                    val user = db.getById(id)?.toRouteModel()
+                    val user = when {
+                        id != null -> db.getById(id)?.toRouteModel()
+                        authId != null -> db.getByAuthUid(authId)?.toRouteModel()
+                        email != null -> db.getByEmail(email)?.toRouteModel()
+                        else -> throw IllegalArgumentException()
+                    }
+
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
                     } else {
@@ -89,55 +97,7 @@ fun Route.userRoutes() {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
             }
-        }
 
-        route("/v1/user/byEmail/{email}") {
-            get {
-                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-                val email = call.parameters["email"]
-                if (email == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong email param")
-                    return@get
-                }
-
-                try {
-                    val user = db.getByEmail(email)?.toRouteModel()
-                    if (user != null) {
-                        call.respond(HttpStatusCode.OK, user)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
-                } catch (e: Exception) {
-                    call.respond(HttpStatusCode.InternalServerError, e.toString())
-                }
-            }
-        }
-
-        route("/v1/user/byAuthId/{authUid}") {
-            get {
-                call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-                val authUid = call.parameters["authUid"]
-                if (authUid == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong authUid param")
-                    return@get
-                }
-
-                try {
-                    val user = db.getByAuthUid(authUid)?.toRouteModel()
-                    if (user != null) {
-                        call.respond(HttpStatusCode.OK, user)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
-                } catch (e: Exception) {
-                    call.respond(HttpStatusCode.InternalServerError, e.toString())
-                }
-            }
-        }
-
-        route("/v1/user") {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
@@ -159,9 +119,7 @@ fun Route.userRoutes() {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
             }
-        }
 
-        route("/v1/user/{id}") {
             delete {
                 call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
