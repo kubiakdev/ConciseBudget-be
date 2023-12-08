@@ -6,7 +6,6 @@ import kubiakdev.com.data.database.database
 import kubiakdev.com.data.database.model.user.UserEntity
 import org.bson.types.ObjectId
 
-// todo fix methods after converting to mongo driver
 class UserDao {
     private val collection = database.getCollection<UserEntity>("user")
 

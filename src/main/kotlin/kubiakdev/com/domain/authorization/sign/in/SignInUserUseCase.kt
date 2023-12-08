@@ -1,6 +1,6 @@
 package kubiakdev.com.domain.authorization.sign.`in`
 
-import kubiakdev.com.app.authorization.sign.`in`.SignInResponse
+import kubiakdev.com.app.authentication.sign.`in`.SignInResponse
 import kubiakdev.com.util.Response
 
 interface SignInUserUseCase {

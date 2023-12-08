@@ -2,8 +2,8 @@ package kubiakdev.com.util.mapper
 
 import kubiakdev.com.data.database.model.transaction.TransactionEntity
 import kubiakdev.com.data.database.model.transaction.TransactionPartEntity
-import kubiakdev.com.route.model.transaction.TransactionPartRouteModel
-import kubiakdev.com.route.model.transaction.TransactionRouteModel
+import kubiakdev.com.route.transaction.v1.model.TransactionPartRouteModel
+import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
 import org.bson.types.ObjectId
 
 fun TransactionEntity.toRouteModel() = TransactionRouteModel(

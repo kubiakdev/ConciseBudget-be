@@ -1,9 +1,9 @@
 package kubiakdev.com.di
 
 import com.google.firebase.auth.FirebaseAuth
-import kubiakdev.com.app.authorization.firebase.FirebaseAppInitializer
-import kubiakdev.com.app.authorization.sign.`in`.SignInUserUseCaseImpl
-import kubiakdev.com.app.authorization.sign.up.SignUpUserUseCaseImpl
+import kubiakdev.com.app.authentication.firebase.FirebaseAppInitializer
+import kubiakdev.com.app.authentication.sign.`in`.SignInUserUseCaseImpl
+import kubiakdev.com.app.authentication.sign.up.SignUpUserUseCaseImpl
 import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import org.koin.dsl.module
