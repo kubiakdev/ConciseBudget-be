@@ -46,6 +46,9 @@ dependencies {
     // Mongo
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.0")
 
+    // Rate limiting
+    implementation("io.ktor:ktor-server-rate-limit:2.3.6")
+
     // Serialization
     implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
