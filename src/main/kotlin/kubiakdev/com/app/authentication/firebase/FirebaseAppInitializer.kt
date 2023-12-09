@@ -8,7 +8,9 @@ import java.io.InputStream
 class FirebaseAppInitializer {
 
     fun init() {
-        FirebaseApp.initializeApp(getFirebaseOptions())
+        if (FirebaseApp.getApps().isEmpty()) {
+            FirebaseApp.initializeApp(getFirebaseOptions())
+        }
     }
 
     private fun getFirebaseOptions(): FirebaseOptions = FirebaseOptions.builder()

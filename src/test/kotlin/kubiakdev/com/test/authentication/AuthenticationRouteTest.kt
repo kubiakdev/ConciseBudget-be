@@ -16,7 +16,7 @@ class AuthenticatedRouteTest {
 
     @Test
     fun `GIVEN incorrect signing up data WHEN signing up THEN 400 bad request`() = testApplication {
-        client.post("/user/sign-up") {
+        client.post("/v1/user/sign-up") {
             contentType(ContentType.Application.Json)
             setBody(json.encodeToString(Unit))
         }.apply {
@@ -26,7 +26,7 @@ class AuthenticatedRouteTest {
 
     @Test
     fun `GIVEN incorrect signing in data WHEN signing in THEN 400 bad request`() = testApplication {
-        client.post("/user/sign-in") {
+        client.post("/v1/user/sign-in") {
             contentType(ContentType.Application.Json)
             setBody(json.encodeToString(Unit))
         }.apply {
@@ -38,7 +38,7 @@ class AuthenticatedRouteTest {
     @Test
     fun `GIVEN correct signing up data WHEN signing up THEN 201 created`() = testApplication {
         val exampleBody = SignUpBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
-        client.post("/user/sign-up") {
+        client.post("/v1/user/sign-up") {
             contentType(ContentType.Application.Json)
             setBody(json.encodeToString(exampleBody))
         }.apply {
@@ -49,7 +49,7 @@ class AuthenticatedRouteTest {
     @Test
     fun `GIVEN correct signing in data WHEN signing in THEN 200 ok`() = testApplication {
         val exampleBody = SignInBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
-        client.post("/user/sign-in") {
+        client.post("/v1/user/sign-in") {
             contentType(ContentType.Application.Json)
             setBody(json.encodeToString(exampleBody))
         }.apply {
