@@ -10,6 +10,7 @@ import kubiakdev.com.app.authentication.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authentication.sign.`in`.SignInResponse
 import kubiakdev.com.app.authentication.sign.up.SignUpBodyRouteModel
 import kubiakdev.com.util.provider.json
+import org.junit.Ignore
 import kotlin.test.Test
 
 class AuthenticatedRouteTest {
@@ -34,7 +35,7 @@ class AuthenticatedRouteTest {
         }
     }
 
-    // todo remove the user at the end
+    @Ignore("Ignored by now because the user has to be removed at the end")
     @Test
     fun `GIVEN correct signing up data WHEN signing up THEN 201 created`() = testApplication {
         val exampleBody = SignUpBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
