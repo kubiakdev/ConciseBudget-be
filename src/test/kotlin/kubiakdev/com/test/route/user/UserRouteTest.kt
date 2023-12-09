@@ -1,4 +1,4 @@
-package kubiakdev.com.test.authentication
+package kubiakdev.com.test.route.user
 
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
