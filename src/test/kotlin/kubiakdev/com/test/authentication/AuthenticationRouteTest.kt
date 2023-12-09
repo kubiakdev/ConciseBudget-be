@@ -58,4 +58,23 @@ class AuthenticatedRouteTest {
             assertEquals("testtest@wp.pl", content.email)
         }
     }
+
+    @Test
+    fun `GIVEN a lot of requests WHEN signing in a lot THEN 423 rate limit working`() = testApplication {
+        val exampleBody = SignInBodyRouteModel(email = "testtest@wp.pl", password = "testtest")
+        repeat(10) {
+            client.post("/v1/user/sign-in") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(exampleBody))
+            }
+        }
+
+        client.post("/v1/user/sign-in") {
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(exampleBody))
+        }
+            .apply {
+                assertEquals(HttpStatusCode.TooManyRequests, status)
+            }
+    }
 }
