@@ -1,8 +1,8 @@
 package kubiakdev.com.app.friends
 
 import kubiakdev.com.data.database.dao.FriendsDao
+import kubiakdev.com.data.database.model.friend.toDomainModel
 import kubiakdev.com.domain.model.friend.Friends
-import kubiakdev.com.util.mapper.toDomainModel
 
 class LoadFriendsUseCase(
     private val dao: FriendsDao,

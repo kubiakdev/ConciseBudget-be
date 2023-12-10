@@ -20,3 +20,9 @@ fun Friends.toEntityModel() = FriendsEntity(
     ownerId = ownerId,
     friends = friends.map { it.toEntityModel() }
 )
+
+fun FriendsEntity.toDomainModel() = Friends(
+    id = id!!.toString(),
+    ownerId = ownerId,
+    friends = friends.map { it.toDomainModel() }
+)

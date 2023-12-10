@@ -13,7 +13,7 @@ import kubiakdev.com.app.friends.UpdateFriendsUseCase
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.route.friends.v1.model.FriendRouteModel
 import kubiakdev.com.route.friends.v1.model.toDomainModel
-import kubiakdev.com.util.mapper.toRouteModel
+import kubiakdev.com.route.friends.v1.model.toRouteModel
 import org.koin.ktor.ext.inject
 
 fun Route.friendsRoutes() {
