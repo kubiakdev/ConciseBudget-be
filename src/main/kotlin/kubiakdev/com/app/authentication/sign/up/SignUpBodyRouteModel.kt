@@ -7,4 +7,5 @@ import kotlinx.serialization.Serializable
 data class SignUpBodyRouteModel(
     @SerialName("email") val email: String?,
     @SerialName("password") val password: String?,
+    @SerialName("publicKey") val publicKey: String?,
 )

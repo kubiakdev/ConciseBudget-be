@@ -5,14 +5,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignUpResponse(
-    @SerialName("authId") val id: String,
+    @SerialName("id") val id: String,
+    @SerialName("authId") val authId: String,
     @SerialName("email") val email: String,
     @SerialName("token") val token: String,
     @SerialName("refreshToken") val refreshToken: String,
 )
 
-fun SignUpFirebaseResponse.toFinalResponseModel() = SignUpResponse(
-    id = id,
+fun SignUpFirebaseResponse.toFinalResponseModel(dbId: String) = SignUpResponse(
+    id = dbId,
+    authId = id,
     email = email,
     token = token,
     refreshToken = refreshToken

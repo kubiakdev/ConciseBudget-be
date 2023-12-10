@@ -11,13 +11,11 @@ class CreateUserUseCase(
         authId: String,
         email: String,
         publicKey: String,
-    ) {
-        dao.addUser(
-            UserEntity(
-                authUid = authId,
-                email = email,
-                publicKey = publicKey,
-            )
+    ): String? = dao.addUser(
+        UserEntity(
+            authUid = authId,
+            email = email,
+            publicKey = publicKey,
         )
-    }
+    )?.toHexString()
 }

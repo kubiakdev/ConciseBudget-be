@@ -15,7 +15,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single { FirebaseAppInitializer() }
-    single<SignUpUserUseCase> { SignUpUserUseCaseImpl() }
+    single<SignUpUserUseCase> { SignUpUserUseCaseImpl(get()) }
     single<SignInUserUseCase> { SignInUserUseCaseImpl() }
     single<FirebaseAuth> { FirebaseAuth.getInstance() }
     singleOf(::CreateUserUseCase)

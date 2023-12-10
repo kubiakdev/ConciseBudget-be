@@ -10,18 +10,29 @@ import kubiakdev.com.util.Response
 import kubiakdev.com.util.provider.httpClient
 import kubiakdev.com.util.provider.json
 
-class SignUpUserUseCaseImpl : SignUpUserUseCase {
+class SignUpUserUseCaseImpl(
+    private val createUserUseCase: CreateUserUseCase,
+) : SignUpUserUseCase {
 
-    override suspend fun signUpUser(email: String, password: String): Response<SignUpResponse> {
+    override suspend fun signUpUser(email: String, password: String, publicKey: String): Response<SignUpResponse> {
         return try {
-            createFirebaseUser(email, password)
+            val response = createFirebaseUser(email, password)
+            val result = response.result.getOrNull()!!
+
+            val id = createUserUseCase.createUserInDatabase(
+                authId = result.id,
+                email = email,
+                publicKey = publicKey,
+            )
+
+            Response(Result.success(result.toFinalResponseModel(id!!)), HttpStatusCode.Created)
         } catch (e: Exception) {
             e.printStackTrace()
             Response(Result.failure(e), HttpStatusCode.InternalServerError)
         }
     }
 
-    private suspend fun createFirebaseUser(email: String, password: String): Response<SignUpResponse> {
+    private suspend fun createFirebaseUser(email: String, password: String): Response<SignUpFirebaseResponse> {
         val body = SignUpFirebaseBody(email, password, returnSecureToken = true)
         val bodyJson = Json.encodeToString(body)
 
@@ -39,7 +50,7 @@ class SignUpUserUseCaseImpl : SignUpUserUseCase {
             if (response.status.isSuccess()) {
                 val firebaseResponse = json.decodeFromString<SignUpFirebaseResponse>(response.bodyAsText())
                 Response(
-                    Result.success(firebaseResponse.toFinalResponseModel()),
+                    Result.success(firebaseResponse),
                     HttpStatusCode.Created
                 )
             } else {

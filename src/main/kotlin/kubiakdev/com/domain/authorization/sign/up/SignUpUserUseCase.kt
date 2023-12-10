@@ -5,5 +5,5 @@ import kubiakdev.com.util.Response
 
 interface SignUpUserUseCase {
 
-    suspend fun signUpUser(email: String, password: String): Response<SignUpResponse>
+    suspend fun signUpUser(email: String, password: String, publicKey: String): Response<SignUpResponse>
 }
