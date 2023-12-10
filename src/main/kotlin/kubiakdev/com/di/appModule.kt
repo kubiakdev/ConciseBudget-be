@@ -5,6 +5,9 @@ import kubiakdev.com.app.authentication.firebase.FirebaseAppInitializer
 import kubiakdev.com.app.authentication.sign.`in`.SignInUserUseCaseImpl
 import kubiakdev.com.app.authentication.sign.up.CreateUserUseCase
 import kubiakdev.com.app.authentication.sign.up.SignUpUserUseCaseImpl
+import kubiakdev.com.app.friends.CreateFriendsUseCase
+import kubiakdev.com.app.friends.LoadFriendsUseCase
+import kubiakdev.com.app.friends.UpdateFriendsUseCase
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.dao.TransactionDao
 import kubiakdev.com.data.database.dao.UserDao
@@ -15,12 +18,18 @@ import org.koin.dsl.module
 
 val appModule = module {
     single { FirebaseAppInitializer() }
-    single<SignUpUserUseCase> { SignUpUserUseCaseImpl(get()) }
-    single<SignInUserUseCase> { SignInUserUseCaseImpl() }
     single<FirebaseAuth> { FirebaseAuth.getInstance() }
-    singleOf(::CreateUserUseCase)
 
+    // Dao
     singleOf(::UserDao)
     singleOf(::FriendsDao)
     singleOf(::TransactionDao)
+
+    // Use cases
+    singleOf(::LoadFriendsUseCase)
+    singleOf(::UpdateFriendsUseCase)
+    singleOf(::CreateFriendsUseCase)
+    singleOf(::CreateUserUseCase)
+    single<SignUpUserUseCase> { SignUpUserUseCaseImpl(get()) }
+    single<SignInUserUseCase> { SignInUserUseCaseImpl() }
 }
