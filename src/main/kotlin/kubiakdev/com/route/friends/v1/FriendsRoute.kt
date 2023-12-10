@@ -8,13 +8,16 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
+import kubiakdev.com.app.friends.LoadFriendsUseCase
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.route.friends.v1.model.FriendsRouteModel
 import kubiakdev.com.util.mapper.toEntityModel
 import kubiakdev.com.util.mapper.toRouteModel
+import org.koin.ktor.ext.inject
 
 fun Route.friendsRoutes() {
     val db = FriendsDao()
+    val loadFriendsUseCase by inject<LoadFriendsUseCase>()
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
         route("/v1/friends") {
@@ -22,7 +25,7 @@ fun Route.friendsRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val friends = db.loadAll(ownerUserId = principal.userId)?.toRouteModel()
+                    val friends = loadFriendsUseCase.loadFriends(userId = principal.userId)?.toRouteModel()
                     if (friends != null) {
                         call.respond(HttpStatusCode.OK, friends)
                     } else {
