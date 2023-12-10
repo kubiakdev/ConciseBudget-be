@@ -7,7 +7,8 @@ import kubiakdev.com.app.authentication.sign.up.CreateUserUseCase
 import kubiakdev.com.app.authentication.sign.up.SignUpUserUseCaseImpl
 import kubiakdev.com.app.friends.CreateFriendsUseCase
 import kubiakdev.com.app.friends.LoadFriendsUseCase
-import kubiakdev.com.app.friends.UpdateFriendsUseCase
+import kubiakdev.com.app.friends.AddFriendUseCase
+import kubiakdev.com.app.friends.RemoveFriendUseCase
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.dao.TransactionDao
 import kubiakdev.com.data.database.dao.UserDao
@@ -27,7 +28,8 @@ val appModule = module {
 
     // Use cases
     singleOf(::LoadFriendsUseCase)
-    singleOf(::UpdateFriendsUseCase)
+    singleOf(::AddFriendUseCase)
+    singleOf(::RemoveFriendUseCase)
     singleOf(::CreateFriendsUseCase)
     singleOf(::CreateUserUseCase)
     single<SignUpUserUseCase> { SignUpUserUseCaseImpl(get()) }
