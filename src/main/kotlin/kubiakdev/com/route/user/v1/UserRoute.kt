@@ -21,7 +21,6 @@ import kubiakdev.com.route.user.v1.model.UserRouteModel
 import kubiakdev.com.util.Response
 import kubiakdev.com.util.mapper.toDomainModel
 import kubiakdev.com.util.mapper.toEntityModel
-import kubiakdev.com.util.mapper.toRouteModel
 import org.koin.ktor.ext.inject
 
 fun Route.userRoutes() {
@@ -78,7 +77,7 @@ fun Route.userRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val user = db.getByAuthUid(principal.userId)?.toRouteModel()
+                    val user = db.getByAuthUid(principal.userId)?.toDomainModel()
 
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
@@ -102,7 +101,7 @@ fun Route.userRoutes() {
                 }
 
                 try {
-                    val userId = db.addUser(user.toEntityModel())
+                    val userId = db.addUser(user.toDomainModel().toEntityModel())
                     if (userId != null) {
                         call.respond(HttpStatusCode.Created)
                     } else {

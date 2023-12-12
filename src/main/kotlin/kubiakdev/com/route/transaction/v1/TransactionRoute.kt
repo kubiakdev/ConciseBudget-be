@@ -11,7 +11,7 @@ import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
 import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
 import kubiakdev.com.util.mapper.toEntityModel
-import kubiakdev.com.util.mapper.toRouteModel
+import kubiakdev.com.util.mapper.toDomainModel
 
 fun Route.transactionRoutes() {
     val db = TransactionDao()
@@ -22,7 +22,7 @@ fun Route.transactionRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val transactions = db.loadAll(userId = principal.userId).map { it.toRouteModel() }
+                    val transactions = db.loadAll(userId = principal.userId).map { it.toDomainModel() }
                     call.respond(HttpStatusCode.OK, transactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())

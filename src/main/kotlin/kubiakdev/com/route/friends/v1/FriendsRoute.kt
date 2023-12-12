@@ -27,7 +27,7 @@ fun Route.friendsRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val friends = loadFriendsUseCase.loadFriends(userId = principal.userId)?.toRouteModel()
+                    val friends = loadFriendsUseCase.loadFriends(userId = principal.userId)
                     if (friends != null) {
                         call.respond(HttpStatusCode.OK, friends)
                     } else {

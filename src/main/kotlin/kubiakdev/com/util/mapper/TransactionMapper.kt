@@ -6,16 +6,16 @@ import kubiakdev.com.route.transaction.v1.model.TransactionPartRouteModel
 import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
 import org.bson.types.ObjectId
 
-fun TransactionEntity.toRouteModel() = TransactionRouteModel(
+fun TransactionEntity.toDomainModel() = TransactionRouteModel(
     id = id?.toString(),
     title,
     date,
     category,
-    parts.map { it.toRouteModel() },
+    parts.map { it.toDomainModel() },
     settled
 )
 
-private fun TransactionPartEntity.toRouteModel() = TransactionPartRouteModel(
+private fun TransactionPartEntity.toDomainModel() = TransactionPartRouteModel(
     title = title,
     userId = userId,
     cost = cost,
