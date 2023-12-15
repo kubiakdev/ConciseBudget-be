@@ -6,3 +6,8 @@ data class FriendWithUserData(
     val email: String,
     val publicKey: String,
 )
+
+fun FriendWithUserData.toFriendModel() = Friend(
+    userId = userId,
+    username = username,
+)

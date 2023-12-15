@@ -10,7 +10,7 @@ class LoadFriendsUseCase(
     private val loadUserUseCase: LoadUserUseCase,
 ) {
 
-    suspend fun loadFriends(userId: String): FriendsWithUserData? {
+    suspend fun loadFriends(userId: String): FriendsWithUserData {
         var friends = dao.loadAll(userId)
         if (friends == null) {
             createFriendsUseCase.createFriendsList(userId)

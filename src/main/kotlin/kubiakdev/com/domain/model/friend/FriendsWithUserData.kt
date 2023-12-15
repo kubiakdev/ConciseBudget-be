@@ -5,3 +5,9 @@ data class FriendsWithUserData(
     val ownerId: String,
     val friends: List<FriendWithUserData>,
 )
+
+fun FriendsWithUserData.toFriendsModel() = Friends(
+    id = id,
+    ownerId = ownerId,
+    friends = friends.map { it.toFriendModel() },
+)
