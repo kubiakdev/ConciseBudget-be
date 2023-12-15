@@ -10,14 +10,14 @@ class LoadFriendsUseCase(
     private val loadUserUseCase: LoadUserUseCase,
 ) {
 
-    suspend fun loadFriends(userId: String): FriendsWithUserData {
+    suspend fun loadFriends(userId: String): FriendsWithUserData? {
         var friends = dao.loadAll(userId)
         if (friends == null) {
             createFriendsUseCase.createFriendsList(userId)
             friends = dao.loadAll(userId)
         }
 
-        val friendsWithUserData = friends!!.friends.map { friend ->
+        val friendsWithUserData = friends?.friends?.map { friend ->
             val user = loadUserUseCase.loadUser(userId)!!
             FriendWithUserData(
                 userId = userId,
@@ -27,10 +27,12 @@ class LoadFriendsUseCase(
             )
         }
 
-        return FriendsWithUserData(
-            id = friends.id!!.toHexString(),
-            ownerId = friends.ownerId,
-            friends = friendsWithUserData,
-        )
+        return friends?.let {
+            FriendsWithUserData(
+                id = friends.id!!.toHexString(),
+                ownerId = friends.ownerId,
+                friends = friendsWithUserData!!,
+            )
+        }
     }
 }
