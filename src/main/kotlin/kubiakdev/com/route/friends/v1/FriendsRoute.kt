@@ -15,6 +15,7 @@ import kubiakdev.com.app.friends.RemoveFriendUseCase
 import kubiakdev.com.route.friends.v1.model.FriendRouteModel
 import kubiakdev.com.route.friends.v1.model.toDomainModel
 import kubiakdev.com.route.friends.v1.model.toRouteModel
+import kubiakdev.com.route.util.RouteConst
 import org.koin.ktor.ext.inject
 
 fun Route.friendsRoutes() {
@@ -24,7 +25,7 @@ fun Route.friendsRoutes() {
     val removeFriendUseCase by inject<RemoveFriendUseCase>()
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/v1/friends") {
+        route(RouteConst.ROUTE_V1_FRIENDS) {
             get {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -59,7 +60,7 @@ fun Route.friendsRoutes() {
             }
         }
 
-        route("/v1/friend") {
+        route(RouteConst.ROUTE_V1_FRIEND) {
             get {
                 call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 

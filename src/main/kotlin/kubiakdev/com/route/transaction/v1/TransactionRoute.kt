@@ -10,6 +10,7 @@ import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBA
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
 import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
+import kubiakdev.com.route.util.RouteConst
 import kubiakdev.com.util.mapper.toDomainModel
 import kubiakdev.com.util.mapper.toEntityModel
 
@@ -17,7 +18,7 @@ fun Route.transactionRoutes() {
     val db = TransactionDao()
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/v1/transactions") {
+        route(RouteConst.ROUTE_V1_TRANSACTIONS) {
             get {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
@@ -30,7 +31,7 @@ fun Route.transactionRoutes() {
             }
         }
 
-        route("/v1/transaction") {
+        route(RouteConst.ROUTE_V1_TRANSACTION) {
             post {
                 val principal = call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 

@@ -18,6 +18,7 @@ import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import kubiakdev.com.domain.route.model.sign.`in`.SignInBody
 import kubiakdev.com.domain.route.model.sign.up.SignUpBody
 import kubiakdev.com.route.user.v1.model.UserRouteModel
+import kubiakdev.com.route.util.RouteConst
 import kubiakdev.com.util.Response
 import kubiakdev.com.util.mapper.toDomainModel
 import kubiakdev.com.util.mapper.toEntityModel
@@ -28,7 +29,7 @@ fun Route.userRoutes() {
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()
 
-    route("/v1/user/sign-up") {
+    route(RouteConst.ROUTE_V1_SIGN_UP) {
         post {
             val body: SignUpBody
             try {
@@ -49,7 +50,7 @@ fun Route.userRoutes() {
         }
     }
 
-    route("/v1/user/sign-in") {
+    route(RouteConst.ROUTE_V1_SIGN_IN) {
         post {
             val body: SignInBody
             try {
@@ -66,7 +67,7 @@ fun Route.userRoutes() {
     }
 
     authenticate(FIREBASE_AUTH_CONFIGURATION_NAME) {
-        route("/v1/user") {
+        route(RouteConst.ROUTE_V1_USER) {
             get {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
