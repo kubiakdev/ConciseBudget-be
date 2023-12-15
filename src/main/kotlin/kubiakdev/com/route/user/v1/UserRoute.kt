@@ -91,13 +91,17 @@ fun Route.userRoutes() {
             }
 
             post {
-                call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
+                val principal = call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
-                // todo add restriction that only user id can post a method with his id
                 val user = try {
                     call.receive<UserRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong user body")
+                    return@post
+                }
+
+                if (principal.userId != user.authUid){
+                    call.respond(HttpStatusCode.MethodNotAllowed, "Token not matches with user authId")
                     return@post
                 }
 
