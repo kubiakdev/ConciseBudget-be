@@ -1,11 +1,11 @@
 package kubiakdev.com.data.database.dao
 
+import com.mongodb.client.model.Filters.and
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.Updates
 import kotlinx.coroutines.flow.toList
 import kubiakdev.com.data.database.database
 import kubiakdev.com.data.database.model.transaction.TransactionEntity
-import kubiakdev.com.data.database.model.transaction.TransactionPartEntity
 import org.bson.types.ObjectId
 
 class TransactionDao {
@@ -29,6 +29,11 @@ class TransactionDao {
             )
         ) != null
 
-    suspend fun removeById(id: String): Boolean =
-        collection.deleteOne(eq("_id", ObjectId(id))).wasAcknowledged()
+    suspend fun removeById(transactionId: String, userId: String): Boolean =
+        collection.deleteOne(
+            and(
+                eq("_id", ObjectId(transactionId)),
+                eq("parts.userId", userId),
+            )
+        ).wasAcknowledged()
 }

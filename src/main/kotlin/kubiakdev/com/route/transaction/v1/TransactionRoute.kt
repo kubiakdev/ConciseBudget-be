@@ -62,7 +62,7 @@ fun Route.transactionRoutes() {
             }
 
             patch {
-                val principal =  call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
+                val principal = call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
                 val transaction = try {
                     call.receive<TransactionRouteModel>()
@@ -92,17 +92,17 @@ fun Route.transactionRoutes() {
             }
 
             delete {
-                call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
+                val principal =
+                    call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
-                // todo add validation from principal that only transaction part user can remove transaction
-                val id = call.parameters["id"]
-                if (id == null) {
+                val transactionId = call.parameters["id"]
+                if (transactionId == null) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong id param")
                     return@delete
                 }
 
                 try {
-                    val removed = db.removeById(id)
+                    val removed = db.removeById(transactionId = transactionId, userId = principal.userId)
                     if (removed) {
                         call.respond(HttpStatusCode.NoContent)
                     } else {
