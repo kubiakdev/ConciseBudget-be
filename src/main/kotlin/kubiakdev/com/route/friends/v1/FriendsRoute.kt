@@ -43,7 +43,6 @@ fun Route.friendsRoutes() {
             patch {
                 val principal = call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
-                // todo add validation that only friends owner can add friends list, get data from principal
                 val friend = try {
                     call.receive<FriendRouteModel>()
                 } catch (e: Exception) {
@@ -70,7 +69,6 @@ fun Route.friendsRoutes() {
                     return@get
                 }
 
-                // todo add validation that only friends owner can add friends list, get data from principal
                 try {
                     val friend = findFriendUseCase.findUser(email)?.toRouteModel()
                     if (friend != null) {
@@ -88,7 +86,6 @@ fun Route.friendsRoutes() {
                 val principal =
                     call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
-                // todo add validation that only friends owner can add friends list, get data from principal
                 val friend = try {
                     call.receive<FriendRouteModel>()
                 } catch (e: Exception) {
