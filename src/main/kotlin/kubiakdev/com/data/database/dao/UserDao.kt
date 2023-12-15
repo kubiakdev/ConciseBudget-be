@@ -20,6 +20,6 @@ class UserDao {
 
     suspend fun addUser(user: UserEntity): ObjectId? = collection.insertOne(user).insertedId?.asObjectId()?.value
 
-    suspend fun removeById(id: String): Boolean =
-        collection.deleteOne(eq("_id", ObjectId(id))).wasAcknowledged()
+    suspend fun removeByAuthId(authId: String): Boolean =
+        collection.deleteOne(eq("authUid", authId)).wasAcknowledged()
 }

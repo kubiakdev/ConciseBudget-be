@@ -28,6 +28,7 @@ fun Route.userRoutes() {
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()
 
+    // todo to remove
     route("/") {
         get {
             call.respond(HttpStatusCode.OK, "Hello world")
@@ -112,18 +113,12 @@ fun Route.userRoutes() {
                 }
             }
 
-            // todo add restriction that only user id can delete a method with his id
             delete {
-                call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
-
-                val id = call.parameters["id"]
-                if (id == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong id param")
-                    return@delete
-                }
+                val principal =
+                    call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val removed = db.removeById(id)
+                    val removed = db.removeByAuthId(authId = principal.userId)
                     if (removed) {
                         call.respond(HttpStatusCode.NoContent)
                     } else {
