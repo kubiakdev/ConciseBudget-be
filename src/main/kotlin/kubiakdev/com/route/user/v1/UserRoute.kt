@@ -28,13 +28,6 @@ fun Route.userRoutes() {
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()
 
-    // todo to remove
-    route("/") {
-        get {
-            call.respond(HttpStatusCode.OK, "Hello world")
-        }
-    }
-
     route("/v1/user/sign-up") {
         post {
             val body: SignUpBody
@@ -78,7 +71,7 @@ fun Route.userRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val user = db.getByAuthUid(principal.userId)?.toDomainModel()
+                    val user = db.getByAuthUid(authUid = principal.userId)?.toDomainModel()
 
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
