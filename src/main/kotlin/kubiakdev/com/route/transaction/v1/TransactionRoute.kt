@@ -62,13 +62,20 @@ fun Route.transactionRoutes() {
             }
 
             patch {
-                call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
+                val principal =  call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
 
-                // todo add validation from principal that only transaction part user can edit transaction
                 val transaction = try {
                     call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
+                    return@patch
+                }
+
+                if (transaction.parts.none { it.userId == principal.userId }) {
+                    call.respond(
+                        HttpStatusCode.MethodNotAllowed,
+                        "Cannot modify transaction which you are not a part of"
+                    )
                     return@patch
                 }
 
