@@ -10,8 +10,8 @@ import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBA
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
 import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
-import kubiakdev.com.util.mapper.toEntityModel
 import kubiakdev.com.util.mapper.toDomainModel
+import kubiakdev.com.util.mapper.toEntityModel
 
 fun Route.transactionRoutes() {
     val db = TransactionDao()
@@ -32,13 +32,20 @@ fun Route.transactionRoutes() {
 
         route("/v1/transaction") {
             post {
-                call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
+                val principal = call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
-                // todo add validation from principal that only transaction part user can add transaction
                 val transaction = try {
                     call.receive<TransactionRouteModel>()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong transaction body")
+                    return@post
+                }
+
+                if (transaction.parts.none { it.userId == principal.userId }) {
+                    call.respond(
+                        HttpStatusCode.MethodNotAllowed,
+                        "Cannot modify transaction which you are not a part of"
+                    )
                     return@post
                 }
 
