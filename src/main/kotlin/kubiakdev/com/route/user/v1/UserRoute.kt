@@ -6,12 +6,15 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.AUTH_HEADER
+import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.AUTH_SCHEME
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.app.authentication.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authentication.sign.`in`.SignInResponse
 import kubiakdev.com.app.authentication.sign.up.SignUpBodyRouteModel
 import kubiakdev.com.app.authentication.sign.up.SignUpResponse
+import kubiakdev.com.app.user.RemoveUserUseCase
 import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
@@ -25,9 +28,10 @@ import kubiakdev.com.util.mapper.toEntityModel
 import org.koin.ktor.ext.inject
 
 fun Route.userRoutes() {
-    val db = UserDao()
+    val dao by inject<UserDao>()
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()
+    val removeUserUseCase by inject<RemoveUserUseCase>()
 
     route(RouteConst.ROUTE_V1_SIGN_UP) {
         post {
@@ -72,7 +76,7 @@ fun Route.userRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val user = db.getByAuthUid(authUid = principal.userId)?.toDomainModel()
+                    val user = dao.getByAuthUid(authUid = principal.userId)?.toDomainModel()
 
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
@@ -94,13 +98,13 @@ fun Route.userRoutes() {
                     return@post
                 }
 
-                if (principal.userId != user.authUid){
+                if (principal.userId != user.authUid) {
                     call.respond(HttpStatusCode.MethodNotAllowed, "Token not matches with user authId")
                     return@post
                 }
 
                 try {
-                    val userId = db.addUser(user.toDomainModel().toEntityModel())
+                    val userId = dao.addUser(user.toDomainModel().toEntityModel())
                     if (userId != null) {
                         call.respond(HttpStatusCode.Created)
                     } else {
@@ -116,12 +120,11 @@ fun Route.userRoutes() {
                     call.principal<FirebaseUser>() ?: return@delete call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val removed = db.removeByAuthId(authId = principal.userId)
-                    if (removed) {
-                        call.respond(HttpStatusCode.NoContent)
-                    } else {
-                        call.respond(HttpStatusCode.InternalServerError, "Object not removed successfully")
-                    }
+                    removeUserUseCase.removeUser(
+                        authId = principal.userId,
+                        token = call.request.header(AUTH_HEADER)!!.removePrefix("$AUTH_SCHEME ")
+                    )
+                    call.respond(HttpStatusCode.NoContent)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
