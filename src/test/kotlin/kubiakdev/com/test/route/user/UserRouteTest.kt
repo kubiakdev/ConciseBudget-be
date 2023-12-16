@@ -12,7 +12,7 @@ import kubiakdev.com.util.TestConst.EXAMPLE_EMAIL
 import kubiakdev.com.util.TestConst.EXAMPLE_PASSWORD
 import kubiakdev.com.util.provider.json
 import kubiakdev.com.util.testWithUserCreation
-import kotlin.test.Ignore
+import org.junit.Ignore
 import kotlin.test.Test
 
 class AuthenticatedRouteTest {

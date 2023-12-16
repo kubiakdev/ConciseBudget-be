@@ -5,7 +5,8 @@ import io.ktor.server.testing.*
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 
-val defaultTestUser = FirebaseUser(userId = "some-user-id", email = "test@gmail.com")
+val defaultTestUser = FirebaseUser(authId = "some-user-id", email = "test@gmail.com")
+
 fun ApplicationTestBuilder.mockAuthentication(mockAuth: () -> FirebaseUser? = { defaultTestUser }) {
     install(Authentication) {
         val provider = FirebaseAuthTestProvider(

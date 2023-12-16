@@ -12,10 +12,10 @@ import kubiakdev.com.app.authentication.sign.up.SignUpResponse
 import kubiakdev.com.route.util.RouteConst
 import kubiakdev.com.util.provider.json
 
-fun testWithUserCreation(block: suspend ApplicationTestBuilder.() -> Unit) {
+fun testWithUserCreation(block: suspend ApplicationTestBuilder.(SignUpResponse) -> Unit) {
     testApplication {
         val signUpResponse = signUpTestUser()
-        block()
+        block(json.decodeFromString<SignUpResponse>(signUpResponse.bodyAsText()))
         deleteTestUser(signUpResponse)
     }
 }
