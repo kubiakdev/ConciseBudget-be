@@ -5,18 +5,21 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.util.Response
 import kubiakdev.com.util.provider.httpClient
 
 class RemoveUserUseCase(
-    private val dao: UserDao,
+    private val userDao: UserDao,
+    private val friendsDao: FriendsDao,
 ) {
 
     suspend fun removeUser(authId: String, token: String): Response<Unit> {
         return try {
             removeFirebaseUser(authId = authId, token = token)
-            dao.removeByAuthId(authId = authId)
+            userDao.removeByAuthId(authId = authId)
+            friendsDao.remove(userAuthId = authId)
             Response(Result.success(Unit), HttpStatusCode.Created)
         } catch (e: Exception) {
             e.printStackTrace()
