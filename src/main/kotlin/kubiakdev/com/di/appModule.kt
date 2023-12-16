@@ -32,6 +32,7 @@ val appModule = module {
     singleOf(::CreateFriendsUseCase)
     singleOf(::CreateUserUseCase)
     singleOf(::RemoveUserUseCase)
+    singleOf(::LoadUserUseCase)
     single<SignUpUserUseCase> { SignUpUserUseCaseImpl(get()) }
     single<SignInUserUseCase> { SignInUserUseCaseImpl() }
 }
