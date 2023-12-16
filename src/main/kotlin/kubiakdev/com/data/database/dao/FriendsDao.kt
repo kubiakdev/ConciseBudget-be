@@ -22,4 +22,9 @@ class FriendsDao {
             eq("_id", friends.id),
             Updates.set(FriendsEntity::friends.name, friends.friends)
         ) != null
+
+    suspend fun remove(userId: Long): Boolean =
+        collection.deleteOne(
+            eq(FriendsEntity::ownerId.name, userId)
+        ).wasAcknowledged()
 }
