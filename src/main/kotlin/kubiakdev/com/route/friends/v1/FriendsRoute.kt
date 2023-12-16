@@ -30,7 +30,7 @@ fun Route.friendsRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val friends = loadFriendsUseCase.loadFriends(userId = principal.authId)
+                    val friends = loadFriendsUseCase.loadFriends(userAuthId = principal.authId)
                     if (friends != null) {
                         call.respond(HttpStatusCode.OK, friends.toRouteModel())
                     } else {
@@ -75,7 +75,7 @@ fun Route.friendsRoutes() {
                 }
 
                 try {
-                    addFriendUseCase.addFriend(userId = principal.authId, friend.toDomainModel())
+                    addFriendUseCase.addFriend(userAuthId = principal.authId, friend.toDomainModel())
                     call.respond(HttpStatusCode.NoContent)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())

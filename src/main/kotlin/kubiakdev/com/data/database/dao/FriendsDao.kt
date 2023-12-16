@@ -11,8 +11,8 @@ class FriendsDao {
     private val collection = database.getCollection<FriendsEntity>("friends")
 
     // todo load one friend? nah. probbaly load user instead and create friend on mobile to add it to the list. Meh. So probably add user repository again to the app 
-    suspend fun loadAll(ownerUserId: String): FriendsEntity? =
-        collection.find(eq(FriendsEntity::ownerId.name, ownerUserId)).firstOrNull()
+    suspend fun loadAll(userAuthId: String): FriendsEntity? =
+        collection.find(eq(FriendsEntity::ownerId.name, userAuthId)).firstOrNull()
 
     suspend fun create(friends: FriendsEntity): ObjectId? =
         collection.insertOne(friends).insertedId?.asObjectId()?.value
@@ -23,8 +23,8 @@ class FriendsDao {
             Updates.set(FriendsEntity::friends.name, friends.friends)
         ) != null
 
-    suspend fun remove(userId: Long): Boolean =
+    suspend fun remove(userAuthId: String): Boolean =
         collection.deleteOne(
-            eq(FriendsEntity::ownerId.name, userId)
+            eq(FriendsEntity::ownerId.name, userAuthId)
         ).wasAcknowledged()
 }

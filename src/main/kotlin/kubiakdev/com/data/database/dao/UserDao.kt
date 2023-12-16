@@ -9,9 +9,6 @@ import org.bson.types.ObjectId
 class UserDao {
     private val collection = database.getCollection<UserEntity>("user")
 
-    suspend fun getById(id: String): UserEntity? =
-        collection.find(eq("_id", ObjectId(id))).firstOrNull()
-
     suspend fun getByEmail(email: String): UserEntity? =
         collection.find(eq(UserEntity::email.name, email)).firstOrNull()
 

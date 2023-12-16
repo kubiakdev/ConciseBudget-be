@@ -10,9 +10,9 @@ class AddFriendUseCase(
     private val loadFriendsUseCase: LoadFriendsUseCase,
 ) {
 
-    suspend fun addFriend(userId: String, friend: Friend) {
-        val friends = loadFriendsUseCase.loadFriends(userId = userId)!!.toFriendsModel()
-        val modifiedFriends = friends.apply { this.friends.toMutableList().add(friend) }
+    suspend fun addFriend(userAuthId: String, friend: Friend) {
+        val friends = loadFriendsUseCase.loadFriends(userAuthId = userAuthId)!!.toFriendsModel()
+        val modifiedFriends = friends.copy(friends = friends.friends.toMutableList().apply { add(friend) })
         dao.update(modifiedFriends.toEntityModel())
     }
 }

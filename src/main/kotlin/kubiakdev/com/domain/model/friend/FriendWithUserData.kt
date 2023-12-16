@@ -8,6 +8,6 @@ data class FriendWithUserData(
 )
 
 fun FriendWithUserData.toFriendModel() = Friend(
-    userId = userId,
+    authId = userId,
     username = username,
 )

@@ -11,7 +11,7 @@ class RemoveFriendUseCase(
 ) {
 
     suspend fun removeFriend(userId: String, friend: Friend) {
-        val friends = loadFriendsUseCase.loadFriends(userId = userId)!!.toFriendsModel()
+        val friends = loadFriendsUseCase.loadFriends(userAuthId = userId)!!.toFriendsModel()
         val modifiedFriends = friends.apply { this.friends.toMutableList().remove(friend) }
         dao.update(modifiedFriends.toEntityModel())
     }

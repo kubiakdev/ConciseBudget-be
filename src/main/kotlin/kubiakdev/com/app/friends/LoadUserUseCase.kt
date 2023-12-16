@@ -8,5 +8,5 @@ class LoadUserUseCase(
     private val dao: UserDao,
 ) {
 
-    suspend fun loadUser(userId: String): User? = dao.getById(userId)?.toDomainModel()
+    suspend fun loadUser(userAuthId: String): User? = dao.getByAuthUid(userAuthId)?.toDomainModel()
 }
