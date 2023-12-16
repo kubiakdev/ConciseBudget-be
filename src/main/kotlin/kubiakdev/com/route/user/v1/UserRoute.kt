@@ -76,7 +76,7 @@ fun Route.userRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val user = dao.getByAuthUid(authUid = principal.userId)?.toDomainModel()
+                    val user = dao.getByAuthUid(authUid = principal.authId)?.toDomainModel()
 
                     if (user != null) {
                         call.respond(HttpStatusCode.OK, user)
@@ -98,7 +98,7 @@ fun Route.userRoutes() {
                     return@post
                 }
 
-                if (principal.userId != user.authUid) {
+                if (principal.authId != user.authUid) {
                     call.respond(HttpStatusCode.MethodNotAllowed, "Token not matches with user authId")
                     return@post
                 }
@@ -121,7 +121,7 @@ fun Route.userRoutes() {
 
                 try {
                     removeUserUseCase.removeUser(
-                        authId = principal.userId,
+                        authId = principal.authId,
                         token = call.request.header(AUTH_HEADER)!!.removePrefix("$AUTH_SCHEME ")
                     )
                     call.respond(HttpStatusCode.NoContent)

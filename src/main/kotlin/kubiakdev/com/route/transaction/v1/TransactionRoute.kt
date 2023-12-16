@@ -23,7 +23,7 @@ fun Route.transactionRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val transactions = db.loadAll(userId = principal.userId).map { it.toDomainModel() }
+                    val transactions = db.loadAll(userId = principal.authId).map { it.toDomainModel() }
                     call.respond(HttpStatusCode.OK, transactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
@@ -42,7 +42,7 @@ fun Route.transactionRoutes() {
                     return@post
                 }
 
-                if (transaction.parts.none { it.userId == principal.userId }) {
+                if (transaction.parts.none { it.userId == principal.authId }) {
                     call.respond(
                         HttpStatusCode.MethodNotAllowed,
                         "Cannot modify transaction which you are not a part of"
@@ -72,7 +72,7 @@ fun Route.transactionRoutes() {
                     return@patch
                 }
 
-                if (transaction.parts.none { it.userId == principal.userId }) {
+                if (transaction.parts.none { it.userId == principal.authId }) {
                     call.respond(
                         HttpStatusCode.MethodNotAllowed,
                         "Cannot modify transaction which you are not a part of"
@@ -103,7 +103,7 @@ fun Route.transactionRoutes() {
                 }
 
                 try {
-                    val removed = db.removeById(transactionId = transactionId, userId = principal.userId)
+                    val removed = db.removeById(transactionId = transactionId, userId = principal.authId)
                     if (removed) {
                         call.respond(HttpStatusCode.NoContent)
                     } else {

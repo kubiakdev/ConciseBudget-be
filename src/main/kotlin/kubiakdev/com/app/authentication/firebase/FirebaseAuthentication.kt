@@ -14,7 +14,7 @@ fun Application.configureAuthentication() {
 
     install(Authentication) {
         val provider = FirebaseAuthProvider(FirebaseConfig(FIREBASE_AUTH_CONFIGURATION_NAME))
-        provider.setPrincipalCreationMethod { FirebaseUser(userId = it.uid, email = it.email) }
+        provider.setPrincipalCreationMethod { FirebaseUser(authId = it.uid, email = it.email) }
         register(provider)
     }
 }
