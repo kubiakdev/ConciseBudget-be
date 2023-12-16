@@ -30,30 +30,12 @@ fun Route.friendsRoutes() {
                 val principal = call.principal<FirebaseUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
                 try {
-                    val friends = loadFriendsUseCase.loadFriends(userId = principal.userId)
+                    val friends = loadFriendsUseCase.loadFriends(userId = principal.authId)
                     if (friends != null) {
-                        call.respond(HttpStatusCode.OK, friends)
+                        call.respond(HttpStatusCode.OK, friends.toRouteModel())
                     } else {
                         call.respond(HttpStatusCode.NotFound)
                     }
-                } catch (e: Exception) {
-                    call.respond(HttpStatusCode.InternalServerError, e.toString())
-                }
-            }
-
-            patch {
-                val principal = call.principal<FirebaseUser>() ?: return@patch call.respond(HttpStatusCode.Unauthorized)
-
-                val friend = try {
-                    call.receive<FriendRouteModel>()
-                } catch (e: Exception) {
-                    call.respond(HttpStatusCode.BadRequest, "Wrong friends body")
-                    return@patch
-                }
-
-                try {
-                    addFriendUseCase.addFriend(userId = principal.userId, friend.toDomainModel())
-                    call.respond(HttpStatusCode.NoContent)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
@@ -82,6 +64,23 @@ fun Route.friendsRoutes() {
                 }
             }
 
+            post {
+                val principal = call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
+
+                val friend = try {
+                    call.receive<FriendRouteModel>()
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong friends body")
+                    return@post
+                }
+
+                try {
+                    addFriendUseCase.addFriend(userId = principal.authId, friend.toDomainModel())
+                    call.respond(HttpStatusCode.NoContent)
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
+            }
 
             delete {
                 val principal =
@@ -95,7 +94,7 @@ fun Route.friendsRoutes() {
                 }
 
                 try {
-                    removeFriendUseCase.removeFriend(userId = principal.userId, friend.toDomainModel())
+                    removeFriendUseCase.removeFriend(userId = principal.authId, friend.toDomainModel())
                     call.respond(HttpStatusCode.NoContent)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
