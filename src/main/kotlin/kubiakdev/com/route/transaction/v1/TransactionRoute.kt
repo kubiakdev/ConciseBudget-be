@@ -53,7 +53,7 @@ fun Route.transactionRoutes() {
                 try {
                     val transactionId = db.create(transaction.toEntityModel())
                     if (transactionId != null) {
-                        call.respond(HttpStatusCode.Created)
+                        call.respond(HttpStatusCode.Created, transactionId.toHexString())
                     } else {
                         call.respond(HttpStatusCode.BadRequest)
                     }
