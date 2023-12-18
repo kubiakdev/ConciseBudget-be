@@ -9,7 +9,9 @@ import io.ktor.server.routing.*
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.data.database.dao.TransactionDao
+import kubiakdev.com.data.database.model.transaction.toEntityModel
 import kubiakdev.com.route.transaction.v1.model.TransactionRouteModel
+import kubiakdev.com.route.transaction.v1.model.toDomainModel
 import kubiakdev.com.route.util.RouteConst
 import kubiakdev.com.util.mapper.toDomainModel
 import kubiakdev.com.util.mapper.toEntityModel
@@ -25,6 +27,27 @@ fun Route.transactionRoutes() {
                 try {
                     val transactions = db.loadAll(userId = principal.authId).map { it.toDomainModel() }
                     call.respond(HttpStatusCode.OK, transactions)
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
+            }
+
+            post {
+                call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
+
+                val transactions = try {
+                    call.receive<List<TransactionRouteModel>>()
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest, "Wrong transactions body")
+                    return@post
+                }
+
+                try {
+                    val addedTransactions = transactions.map { transaction ->
+                        val id = db.create(transaction.toDomainModel().toEntityModel())!!.toHexString()
+                        transaction.copy(id = id)
+                    }
+                    call.respond(HttpStatusCode.OK,addedTransactions)
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }

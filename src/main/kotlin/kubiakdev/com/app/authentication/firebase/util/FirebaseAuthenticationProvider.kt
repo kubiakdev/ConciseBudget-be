@@ -44,6 +44,7 @@ class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(conf
         }
     }
 
+    // todo verify that if we can remove it
     private fun requestForAuthenticateOnNullToken(context: AuthenticationContext) {
         context.challenge(
             key = FIREBASE_JWT_AUTH_KEY,

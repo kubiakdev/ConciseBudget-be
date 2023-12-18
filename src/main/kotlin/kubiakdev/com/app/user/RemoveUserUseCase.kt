@@ -17,10 +17,11 @@ class RemoveUserUseCase(
 
     suspend fun removeUser(authId: String, token: String): Response<Unit> {
         return try {
+            // todo break operation in case of failure
             removeFirebaseUser(authId = authId, token = token)
             userDao.removeByAuthId(authId = authId)
             friendsDao.remove(userAuthId = authId)
-            Response(Result.success(Unit), HttpStatusCode.Created)
+            Response(Result.success(Unit), HttpStatusCode.NoContent)
         } catch (e: Exception) {
             e.printStackTrace()
             Response(Result.failure(e), HttpStatusCode.InternalServerError)
@@ -45,7 +46,7 @@ class RemoveUserUseCase(
             if (response.status.isSuccess()) {
                 Response(
                     Result.success(Unit),
-                    HttpStatusCode.Created
+                    HttpStatusCode.NoContent
                 )
             } else {
                 println("Error: ${response.status}")
