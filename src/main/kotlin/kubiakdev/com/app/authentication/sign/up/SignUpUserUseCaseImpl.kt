@@ -17,15 +17,19 @@ class SignUpUserUseCaseImpl(
     override suspend fun signUpUser(email: String, password: String, publicKey: String): Response<SignUpResponse> {
         return try {
             val response = createFirebaseUser(email, password)
-            val result = response.result.getOrNull()!!
 
-            val id = createUserUseCase.createUserInDatabase(
-                authId = result.id,
-                email = email,
-                publicKey = publicKey,
-            )
+            if (response.status == HttpStatusCode.BadRequest) {
+                Response(Result.failure(Exception("User with given email already exists")), HttpStatusCode.BadRequest)
+            } else {
+                val result = response.result.getOrNull()!!
+                val id = createUserUseCase.createUserInDatabase(
+                    authId = result.id,
+                    email = email,
+                    publicKey = publicKey,
+                )
 
-            Response(Result.success(result.toFinalResponseModel(id!!)), HttpStatusCode.Created)
+                Response(Result.success(result.toFinalResponseModel(id!!)), HttpStatusCode.Created)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Response(Result.failure(e), HttpStatusCode.InternalServerError)

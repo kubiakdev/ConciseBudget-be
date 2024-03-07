@@ -50,7 +50,7 @@ fun Route.userRoutes() {
                     publicKey = body.publicKey,
                 )
 
-            call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
+            call.respond(response.status, response.result.getOrNull() ?: response.status.description)
         }
     }
 
