@@ -66,7 +66,10 @@ fun Route.userRoutes() {
 
             val response: Response<SignInResponse> =
                 signInUseCase.signInUser(email = body.email, password = body.password)
-            call.respond(response.status, response.result.getOrNull() ?: response.result.exceptionOrNull()!!)
+            call.respond(
+                status = response.status,
+                message = response.result.getOrNull() ?: response.status.description
+            )
         }
     }
 

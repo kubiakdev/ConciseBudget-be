@@ -43,7 +43,7 @@ class SignInUserUseCaseImpl : SignInUserUseCase {
                 )
             } else {
                 println("Error: ${response.status}")
-                Response(Result.failure(Throwable(response.status.description)), response.status)
+                Response(Result.failure(Throwable(response.status.description)), HttpStatusCode.NotFound)
             }
         } catch (e: Exception) {
             Response(Result.failure(Throwable(e)), response.status)
