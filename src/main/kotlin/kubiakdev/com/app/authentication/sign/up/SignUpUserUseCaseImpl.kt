@@ -7,6 +7,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import kubiakdev.com.util.Response
+import kubiakdev.com.util.provider.getFirebaseApiKey
 import kubiakdev.com.util.provider.httpClient
 import kubiakdev.com.util.provider.json
 
@@ -41,7 +42,7 @@ class SignUpUserUseCaseImpl(
         val bodyJson = Json.encodeToString(body)
 
         val response: HttpResponse = httpClient.request(
-            url = Url("$SIGN_UP_FIREBASE_URL?key=${System.getenv("firebase_api_key")}"),
+            url = Url("$SIGN_UP_FIREBASE_URL?key=${getFirebaseApiKey()}"),
             block = {
                 method = HttpMethod.Post
                 contentType(ContentType.Application.Json)

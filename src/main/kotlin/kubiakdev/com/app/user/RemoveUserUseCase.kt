@@ -8,6 +8,7 @@ import kotlinx.serialization.json.Json
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.util.Response
+import kubiakdev.com.util.provider.getFirebaseApiKey
 import kubiakdev.com.util.provider.httpClient
 
 class RemoveUserUseCase(
@@ -33,7 +34,7 @@ class RemoveUserUseCase(
         val bodyJson = Json.encodeToString(body)
 
         val response: HttpResponse = httpClient.request(
-            url = Url("$DELETE_USER_FIREBASE_URL?key=${System.getenv("firebase_api_key")}"),
+            url = Url("$DELETE_USER_FIREBASE_URL?key=${getFirebaseApiKey()}"),
             block = {
                 method = HttpMethod.Post
                 contentType(ContentType.Application.Json)
