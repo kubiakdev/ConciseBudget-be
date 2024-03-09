@@ -15,8 +15,12 @@ import kubiakdev.com.util.provider.json
 fun testWithUserCreation(block: suspend ApplicationTestBuilder.(SignUpResponse) -> Unit) {
     testApplication {
         val signUpResponse = signUpTestUser()
-        block(json.decodeFromString<SignUpResponse>(signUpResponse.bodyAsText()))
-        deleteTestUser(signUpResponse)
+        try {
+            block(json.decodeFromString<SignUpResponse>(signUpResponse.bodyAsText()))
+        } catch (e: Throwable) {
+            deleteTestUser(signUpResponse)
+            throw e
+        }
     }
 }
 
