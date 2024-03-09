@@ -18,8 +18,9 @@ fun testWithUserCreation(block: suspend ApplicationTestBuilder.(SignUpResponse) 
         try {
             block(json.decodeFromString<SignUpResponse>(signUpResponse.bodyAsText()))
         } catch (e: Throwable) {
-            deleteTestUser(signUpResponse)
             throw e
+        } finally {
+            deleteTestUser(signUpResponse)
         }
     }
 }
