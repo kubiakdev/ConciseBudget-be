@@ -18,7 +18,6 @@ class RemoveUserUseCase(
 
     suspend fun removeUser(authId: String, token: String): Response<Unit> {
         return try {
-            // todo break operation in case of failure
             removeFirebaseUser(authId = authId, token = token)
             userDao.removeByAuthId(authId = authId)
             friendsDao.remove(userAuthId = authId)
