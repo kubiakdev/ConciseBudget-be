@@ -4,12 +4,12 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kubiakdev.com.data.database.dao.FriendsDao
 import kubiakdev.com.data.database.dao.UserDao
 import kubiakdev.com.util.Response
 import kubiakdev.com.util.provider.getFirebaseApiKey
 import kubiakdev.com.util.provider.httpClient
+import kubiakdev.com.util.provider.json
 
 class RemoveUserUseCase(
     private val userDao: UserDao,
@@ -30,7 +30,7 @@ class RemoveUserUseCase(
 
     private suspend fun removeFirebaseUser(authId: String, token: String): Response<Unit> {
         val body = RemoveUserFirebaseBody(authId = authId, token = token)
-        val bodyJson = Json.encodeToString(body)
+        val bodyJson = json.encodeToString(body)
 
         val response: HttpResponse = httpClient.request(
             url = Url("$DELETE_USER_FIREBASE_URL?key=${getFirebaseApiKey()}"),

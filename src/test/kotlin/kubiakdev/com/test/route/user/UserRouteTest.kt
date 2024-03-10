@@ -29,7 +29,7 @@ class AuthenticatedRouteTest {
 
     @Test
     fun `GIVEN correct signing in data WHEN signing in THEN 200 ok`() = testWithUserCreation {
-        val exampleBody = SignInBodyRouteModel(email = EXAMPLE_EMAIL, password = EXAMPLE_PASSWORD)
+        val exampleBody = SignInBodyRouteModel(email = it.email, password = EXAMPLE_PASSWORD)
         client.post(ROUTE_V1_SIGN_IN) {
             contentType(ContentType.Application.Json)
             setBody(json.encodeToString(exampleBody))
@@ -43,7 +43,7 @@ class AuthenticatedRouteTest {
     @Ignore("It's currently blocking other tests to pass")
     @Test
     fun `GIVEN a lot of requests WHEN signing in a lot THEN 423 rate limit working`() = testWithUserCreation {
-        val exampleBody = SignInBodyRouteModel(email = EXAMPLE_EMAIL, password = EXAMPLE_PASSWORD)
+        val exampleBody = SignInBodyRouteModel(email =it.email, password = EXAMPLE_PASSWORD)
         repeat(10) {
             client.post(ROUTE_V1_SIGN_IN) {
                 contentType(ContentType.Application.Json)
