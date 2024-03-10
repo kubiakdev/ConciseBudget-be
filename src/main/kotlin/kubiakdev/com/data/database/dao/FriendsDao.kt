@@ -10,7 +10,6 @@ import org.bson.types.ObjectId
 class FriendsDao {
     private val collection = database.getCollection<FriendsEntity>("friends")
 
-    // todo load one friend? nah. probbaly load user instead and create friend on mobile to add it to the list. Meh. So probably add user repository again to the app 
     suspend fun loadAll(userAuthId: String): FriendsEntity? =
         collection.find(eq(FriendsEntity::ownerId.name, userAuthId)).firstOrNull()
 
