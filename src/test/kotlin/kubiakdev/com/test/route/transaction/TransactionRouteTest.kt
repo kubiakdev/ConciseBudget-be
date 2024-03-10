@@ -56,7 +56,7 @@ class TransactionRouteTest {
                 assertEquals(HttpStatusCode.Created, status)
             }
 
-            val transactionId = response.bodyAsText()
+            val transactionId = json.decodeFromString<TransactionRouteModel>(response.bodyAsText()).id
 
             val exampleTransactionPartsPatch = listOf(
                 TransactionPart(

@@ -4,9 +4,9 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.util.Response
+import kubiakdev.com.util.provider.getFirebaseApiKey
 import kubiakdev.com.util.provider.httpClient
 import kubiakdev.com.util.provider.json
 
@@ -22,10 +22,10 @@ class SignInUserUseCaseImpl : SignInUserUseCase {
 
     private suspend fun loginFirebaseUser(email: String, password: String): Response<SignInResponse> {
         val body = SignInFirebaseBody(email, password, returnSecureToken = true)
-        val bodyJson = Json.encodeToString(body)
+        val bodyJson = json.encodeToString(body)
 
         val response: HttpResponse = httpClient.request(
-            url = Url("$SIGN_IN_FIREBASE_URL?key=${System.getenv("firebase_api_key")}"),
+            url = Url("$SIGN_IN_FIREBASE_URL?key=${getFirebaseApiKey()}"),
             block = {
                 method = HttpMethod.Post
                 contentType(ContentType.Application.Json)
