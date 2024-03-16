@@ -22,14 +22,13 @@ class FirebaseAppInitializer {
         .build()
 
     private fun getServiceAccount(): InputStream =
-        if (environment == Environment.Prod) getProdServiceAccount() else getTestServiceAccount()
+        System.getenv("firebase_adminsdk")?.byteInputStream() ?: getLocalServiceAccount()
 
-    private fun getTestServiceAccount(): InputStream = getServiceAccount(envName = "firebase-adminsdk-test")
-
-    private fun getProdServiceAccount(): InputStream = getServiceAccount(envName = "firebase-adminsdk-prod")
-
-    private fun getServiceAccount(envName: String): InputStream =
-        System.getenv(envName)?.byteInputStream() ?: File("$envName.json").inputStream()
+    private fun getLocalServiceAccount(): InputStream = if (environment == Environment.Prod) {
+        File("firebase_adminsdk_prod.json").inputStream()
+    } else {
+        File("firebase_adminsdk_test.json").inputStream()
+    }
 
     private companion object {
         private const val DATABASE_URL = "https://concisebudget-default-rtdb.europe-west1.firebasedatabase.app"
