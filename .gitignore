@@ -34,5 +34,6 @@ out/
 
 src/main/kotlin/kubiakdev/com/data/database/MongoConnection.kt
 src/main/kotlin/kubiakdev/com/app/authentication/firebase/FirebaseConnection.kt
-/firebase-adminsdk.json
+/firebase-adminsdk-prod.json
+/firebase-adminsdk-test.json
 /local.properties
