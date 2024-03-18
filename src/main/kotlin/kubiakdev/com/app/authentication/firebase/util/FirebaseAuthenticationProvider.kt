@@ -7,10 +7,11 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_JWT_AUTH_KEY
 
-class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(config) {
-
-    private val tokenParser = TokenParser()
-    private val tokenVerifier = TokenVerifier()
+class FirebaseAuthProvider(
+    private val tokenParser: TokenParser,
+    private val tokenVerifier: TokenVerifier,
+    config: FirebaseConfig,
+) : AuthenticationProvider(config) {
 
     private lateinit var principalCreationMethod: AuthenticationFunction<FirebaseToken>
 
@@ -28,7 +29,9 @@ class FirebaseAuthProvider(config: FirebaseConfig) : AuthenticationProvider(conf
 
         try {
             val principalUser = tokenVerifier.verifyFirebaseIdToken(
-                call = context.call, authHeader = token, principalCreationMethod = principalCreationMethod
+                call = context.call,
+                authHeader = token,
+                principalCreationMethod = principalCreationMethod,
             )
 
             if (principalUser != null) {

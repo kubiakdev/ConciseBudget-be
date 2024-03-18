@@ -2,6 +2,8 @@ package kubiakdev.com.di
 
 import com.google.firebase.auth.FirebaseAuth
 import kubiakdev.com.app.authentication.firebase.FirebaseAppInitializer
+import kubiakdev.com.app.authentication.firebase.util.TokenParser
+import kubiakdev.com.app.authentication.firebase.util.TokenVerifier
 import kubiakdev.com.app.authentication.sign.`in`.SignInUserUseCaseImpl
 import kubiakdev.com.app.authentication.sign.up.CreateUserUseCase
 import kubiakdev.com.app.authentication.sign.up.SignUpUserUseCaseImpl
@@ -18,6 +20,8 @@ import org.koin.dsl.module
 val appModule = module {
     single { FirebaseAppInitializer() }
     single<FirebaseAuth> { FirebaseAuth.getInstance() }
+    singleOf(::TokenParser)
+    singleOf(::TokenVerifier)
 
     // Dao
     singleOf(::UserDao)

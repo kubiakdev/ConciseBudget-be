@@ -11,6 +11,7 @@ import kubiakdev.com.util.provider.httpClient
 import kubiakdev.com.util.provider.json
 
 class SignInUserUseCaseImpl : SignInUserUseCase {
+
     override suspend fun signInUser(email: String, password: String): Response<SignInResponse> {
         return try {
             loginFirebaseUser(email, password)
