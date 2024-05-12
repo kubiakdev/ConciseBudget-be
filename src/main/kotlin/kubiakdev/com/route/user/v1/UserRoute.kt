@@ -10,12 +10,14 @@ import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.AUTH_H
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.AUTH_SCHEME
 import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBASE_AUTH_CONFIGURATION_NAME
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
+import kubiakdev.com.app.authentication.refresh.RefreshTokenBodyRouteModel
 import kubiakdev.com.app.authentication.sign.`in`.SignInBodyRouteModel
 import kubiakdev.com.app.authentication.sign.`in`.SignInResponse
 import kubiakdev.com.app.authentication.sign.up.SignUpBodyRouteModel
 import kubiakdev.com.app.authentication.sign.up.SignUpResponse
 import kubiakdev.com.app.user.RemoveUserUseCase
 import kubiakdev.com.data.database.dao.UserDao
+import kubiakdev.com.domain.authorization.refresh.RefreshTokenUseCase
 import kubiakdev.com.domain.authorization.sign.`in`.SignInUserUseCase
 import kubiakdev.com.domain.authorization.sign.up.SignUpUserUseCase
 import kubiakdev.com.domain.route.model.sign.`in`.SignInBody
@@ -32,6 +34,7 @@ fun Route.userRoutes() {
     val signUpUseCase by inject<SignUpUserUseCase>()
     val signInUseCase by inject<SignInUserUseCase>()
     val removeUserUseCase by inject<RemoveUserUseCase>()
+    val refreshTokenUseCase by inject<RefreshTokenUseCase>()
 
     route(RouteConst.ROUTE_V1_SIGN_UP) {
         post {
@@ -134,4 +137,23 @@ fun Route.userRoutes() {
             }
         }
     }
+
+    // todo not exposed due to security
+    /*route(RouteConst.ROUTE_V1_REFRESH_TOKEN) {
+        post {
+            val refreshToken: String
+            try {
+                refreshToken = call.receive<RefreshTokenBodyRouteModel>().refreshToken
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, "Wrong body")
+                return@post
+            }
+
+            val response = refreshTokenUseCase.refreshToken(refreshToken)
+            call.respond(
+                status = response.status,
+                message = response.result.getOrNull() ?: response.status.description
+            )
+        }
+    }*/
 }
