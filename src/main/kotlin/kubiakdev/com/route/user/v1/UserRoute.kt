@@ -138,8 +138,7 @@ fun Route.userRoutes() {
         }
     }
 
-    // todo not exposed due to security
-    /*route(RouteConst.ROUTE_V1_REFRESH_TOKEN) {
+    route(RouteConst.ROUTE_V1_REFRESH_TOKEN) {
         post {
             val refreshToken: String
             try {
@@ -149,11 +148,15 @@ fun Route.userRoutes() {
                 return@post
             }
 
-            val response = refreshTokenUseCase.refreshToken(refreshToken)
-            call.respond(
-                status = response.status,
-                message = response.result.getOrNull() ?: response.status.description
-            )
+            try {
+                val response = refreshTokenUseCase.refreshToken(refreshToken)
+                call.respond(
+                    status = response.status,
+                    message = response.result.getOrNull() ?: response.status.description
+                )
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.InternalServerError, e.toString())
+            }
         }
-    }*/
+    }
 }
