@@ -11,4 +11,6 @@ object RouteConst {
 
     const val ROUTE_V1_FRIENDS = "/v1/friends"
     const val ROUTE_V1_FRIEND = "/v1/friend"
+
+    const val ROUTE_V1_RECEIPT_SCAN = "/v1/receipt/scan"
 }
