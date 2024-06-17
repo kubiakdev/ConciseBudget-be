@@ -28,6 +28,9 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
 
+    // AI
+    implementation("dev.shreyaspatil.generativeai:generativeai-google:0.5.0-1.0.0")
+
     // Authentication
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("com.google.firebase:firebase-admin:9.2.0")
