@@ -13,9 +13,6 @@ import kubiakdev.com.app.document.ScanReceiptUseCase
 import kubiakdev.com.route.util.RouteConst
 import kubiakdev.com.util.mapper.toRouteModel
 import org.koin.ktor.ext.inject
-import java.io.File
-
-private const val TEMP_FILE_PATH = "/upload/temp"
 
 fun Route.documentRoutes() {
     val scanReceiptUseCase by inject<ScanReceiptUseCase>()
@@ -25,13 +22,13 @@ fun Route.documentRoutes() {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
-                val tempFile = File(TEMP_FILE_PATH)
+                var imageBytes: ByteArray? = null
                 try {
                     call.receiveMultipart()
                         .readAllParts()
                         .filterIsInstance<PartData.FileItem>()
                         .forEach { part ->
-                            tempFile.writeBytes(part.streamProvider().readBytes())
+                            imageBytes = part.streamProvider().readBytes()
                             part.dispose()
                         }
                 } catch (e: Exception) {
@@ -40,13 +37,12 @@ fun Route.documentRoutes() {
                 }
 
                 try {
-                    val receipt = scanReceiptUseCase.scanReceipt(tempFile.readBytes())?.toRouteModel()
+                    val receipt = scanReceiptUseCase.scanReceipt(imageBytes!!)?.toRouteModel()
                     if (receipt == null) {
                         call.respond(HttpStatusCode.NotAcceptable, "Error during receipt analysis")
                     } else {
                         call.respond(HttpStatusCode.OK, receipt)
                     }
-                    tempFile.delete()
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.InternalServerError, e.toString())
                 }
