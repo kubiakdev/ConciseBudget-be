@@ -11,8 +11,11 @@ import kubiakdev.com.app.authentication.firebase.util.AuthenticationConst.FIREBA
 import kubiakdev.com.app.authentication.firebase.util.FirebaseUser
 import kubiakdev.com.app.document.ScanReceiptUseCase
 import kubiakdev.com.route.util.RouteConst
+import kubiakdev.com.util.mapper.toRouteModel
 import org.koin.ktor.ext.inject
 import java.io.File
+
+private const val TEMP_FILE_PATH = "/upload/temp"
 
 fun Route.documentRoutes() {
     val scanReceiptUseCase by inject<ScanReceiptUseCase>()
@@ -22,35 +25,31 @@ fun Route.documentRoutes() {
             post {
                 call.principal<FirebaseUser>() ?: return@post call.respond(HttpStatusCode.Unauthorized)
 
+                val tempFile = File(TEMP_FILE_PATH)
                 try {
-                    val tempFile = File("temp")
                     call.receiveMultipart()
                         .readAllParts()
                         .filterIsInstance<PartData.FileItem>()
                         .forEach { part ->
                             tempFile.writeBytes(part.streamProvider().readBytes())
                             part.dispose()
-
                         }
-
-                    scanReceiptUseCase.scanReceipt(tempFile.readBytes())
-
-
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest, "Wrong body")
                     return@post
                 }
 
-                // todo make a response and respond
-
-                /*                val response: Response<SignUpResponse> =
-                                    signUpUseCase.signUpUser(
-                                        email = body.email,
-                                        password = body.password,
-                                        publicKey = body.publicKey,
-                                    )
-
-                                call.respond(response.status, response.result.getOrNull() ?: response.status.description)*/
+                try {
+                    val receipt = scanReceiptUseCase.scanReceipt(tempFile.readBytes())?.toRouteModel()
+                    if (receipt == null) {
+                        call.respond(HttpStatusCode.NotAcceptable, "Error during receipt analysis")
+                    } else {
+                        call.respond(HttpStatusCode.OK, receipt)
+                    }
+                    tempFile.delete()
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.InternalServerError, e.toString())
+                }
             }
         }
     }
