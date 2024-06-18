@@ -4,7 +4,7 @@ import dev.shreyaspatil.ai.client.generativeai.GenerativeModel
 import dev.shreyaspatil.ai.client.generativeai.type.content
 import kubiakdev.com.util.provider.local.properties.getLocalProperty
 
-class GeminiConfiguration {
+class GeminiManager {
 
     private val generativeModel = GenerativeModel(
         modelName = MODEL_NAME,

@@ -8,7 +8,10 @@ import kubiakdev.com.app.authentication.refresh.RefreshTokenUseCaseImpl
 import kubiakdev.com.app.authentication.sign.`in`.SignInUserUseCaseImpl
 import kubiakdev.com.app.authentication.sign.up.CreateUserUseCase
 import kubiakdev.com.app.authentication.sign.up.SignUpUserUseCaseImpl
+import kubiakdev.com.app.document.CreateReceiptUseCase
+import kubiakdev.com.app.document.OptimizeImageUseCase
 import kubiakdev.com.app.document.ScanReceiptUseCase
+import kubiakdev.com.app.document.gemini.GeminiManager
 import kubiakdev.com.app.friends.*
 import kubiakdev.com.app.user.RemoveUserUseCase
 import kubiakdev.com.data.database.dao.FriendsDao
@@ -26,6 +29,8 @@ val appModule = module {
     singleOf(::TokenParser)
     singleOf(::TokenVerifier)
 
+    singleOf(::GeminiManager)
+
     // Dao
     singleOf(::UserDao)
     singleOf(::FriendsDao)
@@ -40,6 +45,8 @@ val appModule = module {
     singleOf(::CreateUserUseCase)
     singleOf(::RemoveUserUseCase)
     singleOf(::LoadUserUseCase)
+    singleOf(::CreateReceiptUseCase)
+    singleOf(::OptimizeImageUseCase)
     singleOf(::ScanReceiptUseCase)
     single<SignUpUserUseCase> { SignUpUserUseCaseImpl(get()) }
     single<SignInUserUseCase> { SignInUserUseCaseImpl() }
