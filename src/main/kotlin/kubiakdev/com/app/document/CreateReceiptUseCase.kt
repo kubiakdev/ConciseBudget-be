@@ -1,11 +1,22 @@
 package kubiakdev.com.app.document
 
 import kubiakdev.com.domain.model.document.Receipt
+import kubiakdev.com.util.provider.json
 
 class CreateReceiptUseCase {
 
     fun createReceipt(textResponse: String): Receipt? {
-        // todo create receipt
-        return null
+        return try {
+            val jsonText = getJsonText(textResponse)
+            json.decodeFromString<Receipt>(jsonText)
+        } catch (e: Exception) {
+            // todo log exception to measure gemini failures
+            null
+        }
     }
+
+    private fun getJsonText(textResponse: String): String = textResponse.substring(
+        startIndex = textResponse.indexOfFirst { it == '{' },
+        endIndex = textResponse.indexOfLast { it == '}' }
+    )
 }
