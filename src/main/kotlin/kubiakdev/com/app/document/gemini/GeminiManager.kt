@@ -8,7 +8,7 @@ class GeminiManager {
 
     private val generativeModel = GenerativeModel(
         modelName = MODEL_NAME,
-        apiKey = getLocalProperty(GEMINI_API_KEY)
+        apiKey = System.getenv(GEMINI_API_KEY) ?: getLocalProperty(GEMINI_API_KEY)
     )
 
     suspend fun sendImage(imageBytes: ByteArray, message: String?): String? =
@@ -20,6 +20,6 @@ class GeminiManager {
 
     private companion object {
         private const val MODEL_NAME = "gemini-1.5-flash"
-        private const val GEMINI_API_KEY = "geminiAPIKey"
+        private const val GEMINI_API_KEY = "gemini_api_key"
     }
 }
