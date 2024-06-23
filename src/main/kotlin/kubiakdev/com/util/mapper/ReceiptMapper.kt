@@ -10,6 +10,7 @@ import kubiakdev.com.route.document.v1.model.ReceiptRouteModel
 fun Receipt.toRouteModel() = ReceiptRouteModel(
     title = title,
     date = date,
+    hour = hour,
     price = price,
     items = items?.map { it.toRouteModel() },
 )
@@ -25,6 +26,7 @@ fun ReceiptItem.toRouteModel() = ReceiptItemRouteModel(
 fun ReceiptGeminiResponse.toDomainModel() = Receipt(
     title = title,
     date = date,
+    hour = hour,
     price = parsePrice(price),
     items = items?.map { it.toDomainModel() }
 )

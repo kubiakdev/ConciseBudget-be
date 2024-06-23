@@ -22,7 +22,7 @@ class ScanReceiptUseCase(
 
     private companion object {
         private const val SCAN_RECEIPT_PROMPT = """
-            Na podstawie zdjęcia podaj w json następujące dane:{date, title_with_shop_name, total_price, 
+            Na podstawie zdjęcia podaj w json następujące dane:{date, hour, title_with_shop_name, total_price, 
             items: [{full_name, full_category_name, amount, price_for_one, discount_for_item}]}. 
             Użyj tylko pełnych słów i nazw. Dobierz odpowiednie kategorie
         """
